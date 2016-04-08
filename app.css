@@ -33,17 +33,6 @@ label {
   display: inline;
 }
 
-/* old person-icon properties changed to icon-user for consistency*/
-/*.person-icon {
-  background-image:url(/agent/assets/glyphicons-halflings-d63e747535b6b5c589a12cad5d16a401.png);
-  background-position: -170px 0px;
-  display: inline-block;
-  width: 12px;
-  height: 14px;
-  line-height: 14px;
-  vertical-align: text-top;
-  background-repeat: no-repeat;
-}*/
 
 /*Changed glyphicons source to be white*/
 [class^="icon-"],[class*=" icon-"] {
