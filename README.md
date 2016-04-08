@@ -11,6 +11,8 @@ Source code for the official Opty App for Zendesk
 * modules.xml
 * vcs.xml
 * workspace.xml
+
+
 ### assets 
 ###### images used in the app
 * info.png
@@ -18,6 +20,8 @@ Source code for the official Opty App for Zendesk
 * logo-small.png
 * logo.png
 * promotion-image.png
+
+
 ### templates 
 ###### templates for each function
 * accountInfo.hdbs
@@ -28,13 +32,22 @@ Source code for the official Opty App for Zendesk
 * list.hdbs
 * loading.hdbs
 * modal_c.hdbs
+
+
 ### translations
 * en.json
+
 ### .zat 
 ###### for testing in the Zendesk App Testing environment
+
+
 ### app.css 
 ###### external styles for the app
+
+
 ### app.js 
 ###### core functionality
+
+
 ### manifest.json 
 ###### required for initialization of Zendesk App
