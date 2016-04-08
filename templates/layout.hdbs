@@ -1,0 +1,22 @@
+<header>
+  <span class="logo"/>
+  <h3>Opty App</h3> <!-- main app title in ZenDesk -->
+  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+  
+</header>
+
+<section data-main />
+
+<footer>
+<!--  <a class="left" href="https://optimizely.atlassian.net/secure/CreateIssue!default.jspa" target="new">
+    Report App Bug
+  </a>   -->
+ 
+<!-- <a id="feedback_link" class='btn btn-large btn-inverse' target='_blank' href="https://optimizely.atlassian.net/secure/CreateIssue!default.jspa?pid=14800&issuetype=3">
+    <i class="icon-thumbs-up"></i>Give Feedback
+  </a>   -->
+
+   <a class="right" href="mailto:support@zendesk.com" target="new">
+    Email ZD Support
+  </a>  
+</footer>
