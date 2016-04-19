@@ -310,21 +310,31 @@ events: {
 
       //Get recipient email address to show on the home screen
       var UserAPIURL = "/api/v2/tickets/"+this.ticket().id()+".json";
+      /*
       this.ajax('fetchZendeskData', UserAPIURL)
               .done(function(data) {
                 this.consoleDebug("object","InitialUserObject:",data);
                  this.recipient = data.ticket.recipient || "support@optimizely.com";
                  this.$('#recipient').text(this.recipient);
-                 currentTicket.customField('custom_field_21226130',this.recipient);
+                 console.log(currentTicket.customField('custom_field_21226130'),this.recipient);
+                 if (currentTicket.customField('custom_field_21226130') !== this.recipient) {
+                    console.log("running 1");
+                    currentTicket.customField('custom_field_21226130',this.recipient);
+                    this.ticket().save();
+                 }
                  this.checkRecipient(true);
                })
               .fail(function(data){
                  this.consoleDebug("object","InitialUserObject Request Failed",data);
                  this.recipient= "support@optimizely.com";
                  this.$('#recipient').text(this.recipient);
-                 currentTicket.customField('custom_field_21226130',this.recipient);
+                 if (currentTicket.customField('custom_field_21226130') !== this.recipient) {
+                    console.log("running 2");
+                    currentTicket.customField('custom_field_21226130',this.recipient);
+                 }
                  this.checkRecipient(true);
               });
+        */
 
       //If the impersonation email is blank, then check the impersonation email at the user level. If that is empty, check it at the org level
       //Sets the user email used for the impersonate button, and updates the ticket impersonate field 
@@ -579,7 +589,7 @@ events: {
         else {
           user =this.currentUser().name();
           newemail=this.recipient= this.$("#newRecipient").val();
-        } 
+        }
 
         if (usertype!=="system"){
           runAPI=true;
@@ -600,7 +610,10 @@ events: {
                      //After successful update, update APP screen   
                       this.recipient=newemail;
                       this.$('#recipient').html(this.recipient);
-                      this.ticket().customField('custom_field_21226130',this.recipient);
+                      if (this.ticket().customField('custom_field_21226130') !== this.recipient) {
+                        console.log("running 3",this.ticket().customField('custom_field_21226130'),this.recipient);
+                        this.ticket().customField('custom_field_21226130',this.recipient);
+                      }
                       if (usertype!=="system"){
                         this.$('#appModal').modal("hide");
                       }
@@ -1261,7 +1274,7 @@ events: {
 
        //SFDC API URL to Get Lead information based on email of the requestoer
         var URLBase = this.APIBase +"query/?q=";
-        var action = "Select+Id,OwnerId,SDR_Owner_First_Name__c,SDR_Owner_Last_Name__c,SDR_Owner__c,Status,Name,IsConverted+from+Lead+where+email ='"+this.TktEmail+"'";
+        var action = "Select+Id,OwnerId,SDR_Owner__r.FirstName,SDR_Owner__r.LastName,SDR_Owner__c,Status,Name,IsConverted+from+Lead+where+email ='"+this.TktEmail+"'";
 
         //Debug Mode & Debug Object Mode - Log to Console
         this.consoleDebug("object",'Optimizely SFDC - API Call - ',URLBase+action);
@@ -1281,7 +1294,7 @@ events: {
                         ///Lead Successfully found.  Store info and resent Confirmation Screen
                         this.ChatterRecordId=data.records[0].Id;
                         this.ChatterOwnerId=data.records[0].SDR_Owner__c;
-                        this.ChatterOwnerName = data.records[0].SDR_Owner_First_Name__c +" "+data.records[0].SDR_Owner_Last_Name__c;
+                        this.ChatterOwnerName = data.records[0].SDR_Owner__r.FirstName +" "+data.records[0].SDR_Owner__c.LastName;
                         this.LeadName=data.records[0].Name ;
                         this.LeadStatus= data.records[0].Status;
                         this.LeadConvertedStatus=data.records[0].IsConverted;
