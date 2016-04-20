@@ -6,12 +6,14 @@
 <table id="subscription_notes">
 
 <tr><td class="title">Name: </td><td>{{accountName}}</td></tr>
+<tr><td class="title">High Risk? </td><td>{{churnRisk}}</td></tr>
 <tr><td class="title">Account Manager: </td><td>{{csm}}</td></tr>
 <tr><td class="title">Account MRR: </td><td>{{accountMrr}}</td></tr>
 <tr><td class="title">Subscription MRR: </td><td>{{subscriptionMrr}}</td></tr>
 <tr><td class="title">Billing Start Date: </td><td>{{renewal}}</td></tr>
 <tr><td class="title">Partner: </td><td>{{solutionsPartner}}</td></tr>
 <tr><td class="title">Details: </td><td>{{orgDetails}}</td></tr>
+
 
     
 </table>

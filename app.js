@@ -784,6 +784,9 @@ events: {
                       this.solutionsPartner=data.organizations[0].organization_fields.partner_name;
                       this.accountMrr=data.organizations[0].organization_fields.account_mrr;
                       this.orgDetails=data.organizations[0].details;
+                 //based on the 'High-Risk Account' checkbox at the org level
+                      data.organizations[0].churn_risk === true ? this.churnRisk='yes' : this.churnRisk='no';
+                      //this.churnRisk=data.organizations[0].churn_risk;
 
 
              //End get org information
@@ -831,6 +834,7 @@ events: {
                         accountMrr: this.accountMrr,
                         renewal: this.formattedRenewal,
                         solutionsPartner: this.solutionsPartner,
+                        churnRisk: this.churnRisk,
                         contactName: this.contactName,
                         timeZone: this.timeZone,
                         phone: this.phone,
