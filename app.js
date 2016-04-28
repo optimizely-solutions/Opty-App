@@ -776,7 +776,7 @@ events: {
                   console.log("object",'Fetch Zendesk Org Data Object: ',data);
      
                   //Pass data to local variables
-                      //this.OrgId=data.organizations[0].id;
+                      this.orgId=data.organizations[0].organization_fields.id;
                       this.accountName=data.organizations[0].name;
                       this.csm=data.organizations[0].organization_fields.zendesk_assigned_csm;
                       this.subscriptionMrr=data.organizations[0].organization_fields.subscription_mrr;
@@ -787,6 +787,7 @@ events: {
                  //based on the 'High-Risk Account' checkbox at the org level
                       data.organizations[0].churn_risk === true ? this.churnRisk='yes' : this.churnRisk='no';
                       //this.churnRisk=data.organizations[0].churn_risk;
+                      this.subscription_id=data.organizations[0].organization_fields.subscription_id;
 
 
              //End get org information
@@ -811,9 +812,36 @@ events: {
                     this.platformCertified=data.user.user_fields.platform_certified_user;
                     this.recentTickets=data.user.user_fields.tickets_closed_this_month;
                     this.userDetails=data.user.details;
+                    this.zendesk_salesforce_contact_id=data.user.user_fields.zendesk_salesforce_contact_id;
+
 
              //End get contact information
              });
+            
+            
+               //Set default Salesforce links to the overview pages for contacts, accounts and subscription
+              var orgUrl = "https://c.na28.visual.force.com/apex/Skuid_SubscriptionsTab?save_new=1&sfdc.override=1";
+              var accUrl = "https://c.na28.visual.force.com/apex/Skuid_AccountsTab?save_new=1&sfdc.override=1";
+              var userUrl = "https://c.na28.visual.force.com/apex/Skuid_ContactsTab?save_new=1&sfdc.override=1";
+
+              // If we have the contact id, account id or subscription id, update the links to go directly to this record
+              if (this.subscription_id !== undefined) {
+                orgUrl = "https://c.na28.visual.force.com/apex/Skuid_SubscriptionDetail?id=" + this.subscription_id + "&sfdc.override=1";
+              }
+              if (this.orgId !== undefined) {
+                accUrl = "https://c.na28.visual.force.com/apex/Skuid_AccountDetail?id=" + this.orgId + "&sfdc.override=1";
+              }
+              if (this.zendesk_salesforce_contact_id !== undefined) {
+                userUrl = "https://c.na28.visual.force.com/apex/Skuid_ContactDetail?id=" + this.zendesk_salesforce_contact_id + "&sfdc.override=1";
+              }
+
+              this.sfdcSubscription = "<p><a target='_blank' href=" + orgUrl + ">Go to SFDC Subscription</a></p>";
+              this.sfdcAccount = "<p><a target='_blank' href=" + accUrl + ">Go to SFDC Account</a></p>";
+              this.sfdcUser = "<p><a target='_blank' href=" + userUrl + ">Go to SFDC User</a></p>";    
+            
+              this.sfdcSubscription = orgUrl;
+              this.sfdcAccount = accUrl;
+              this.sfdcUser = userUrl;    
                         
              //function to format the renewal date
              var formatRenewalDate = function(renew){
@@ -842,9 +870,14 @@ events: {
                         platformCertified: this.platformCertified,
                         recentTickets: this.recentTickets,
                         orgDetails: this.orgDetails,
-                        userDetails: this.userDetails
+                        userDetails: this.userDetails,
+                        sfdcSubscription: this.sfdcSubscription,
+                        sfdcAccount: this.sfdcAccount,
+                        sfdcUser: this.sfdcUser    
                 }));
 
+            
+            
         //End getAccountInfo function
         },
 

@@ -25,13 +25,24 @@
 <tr><td class="title">Platform Certified? </td><td>{{platformCertified}}</td></tr>
 <tr><td class="title">Developer Certified? </td><td>{{developerCertified}}</td></tr>
 <tr><td class="title"># Tickets submitted this month: </td><td>{{recentTickets}}</td></tr>
-<tr><td class="title">Phone: </td><td>{{phone}}</td></li>
-<tr><td class="title">Time Zone: </td><td>{{timeZone}}</td></li>
+<tr><td class="title">Phone: </td><td>{{phone}}</td>
+<tr><td class="title">Time Zone: </td><td>{{timeZone}}</td>
 <tr><td class="title">Details: </td><td>{{userDetails}}</td></tr>
 
     
 </table>
 </div>
+
+
+<div id="sfdcLinks">
+
+<p><a class="title" target="_blank" href={{sfdcSubscription}}>SFDC Subscription</a></p>
+<p><a class="title" target="_blank" href={{sfdcAccount}}>SFDC Account</a></p>
+<p><a class="title" target="_blank" href={{sfdcUser}}>SFDC User</a></p>
+
+    
+</div>
+
 
 <!--Coming soon
 
