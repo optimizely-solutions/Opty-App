@@ -1,0 +1,15 @@
+  <div id='account_user' class='links'>
+    <a class='optimizely_link' target='_blank' href="{{link2}}">Account User Page</a>
+  </div>
+  <div id='recurly_user' class='links'>
+    <a class='recurly_link' target='_blank' href="{{link3}}">Recurly by User</a>
+  </div>
+  <div id='recurly_domain' class='links'>
+    <a class='recurly_link' target='_blank' href="{{link4}}">Recurly by Domain</a>
+  </div>
+  <div id='client_website' class='links'>
+    <a class='random_link' target='_blank' href="{{link5}}">Client Website</a>
+  </div>
+  <div id='activity_log' class='links'>
+    <a class='appengine_link' target='_blank' href="{{link6}}">Activity Log</a>
+  </div>

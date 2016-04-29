@@ -1,0 +1,236 @@
+<div id='button_container'>
+
+ <p class="group-label">Impersonate:</p> 
+<!-- Impersonate by email Button -->
+  <a id='impersonate_button' class='btn btn-large btn-inverse btn-small' href="{{link1}}" target='_blank'><i class="icon-user"></i>User</a>
+
+  <!-- Impersonate by experiment id Button -->
+  <a id='impersonate_experiment' class='btn btn-large btn-inverse validation btn-small' {{link8}} target='_blank' style="margin-right:7px;"><i class="icon-pencil"></i>Experiment</a>
+
+  <hr style="float:clear;margin-top:40px" />
+
+<p class="group-label">View Experiment:</p> 
+<!-- View Results -->
+  <a id='view_results' class='btn btn-large btn-inverse validation btn-small' {{link9}} target='_blank'><i class="icon-check"></i>Results</a>
+
+  <!-- View experiment data exports -->
+  <a id='view_exports' class='btn btn-large btn-inverse validation btn-small' {{link10}} target='_blank' style="margin-right:7px;"><i class="icon-th-list"></i>Exports</a>
+
+  <hr style="float:clear;margin-top:40px" />
+
+<!-- Add Collaborator Button -->
+  <a id='collaborator_button' class='btn btn-large btn-inverse btn-blue'><i class="icon-user"></i>Add Collaborator</a>
+  <div id='collaborators' class='hide'>
+  <div style="width:50%;display:inline-block;text-align:center;padding-bottom:10px">SAN FRANCISCO</div>
+  <div style="width:50%;display:inline-block;float:right;text-align:center;padding-bottom:10px">AMSTERDAM</div>
+    <li style="width:50%;display:inline-block;text-align:center">
+      <ul style="display:block" class="btn">Amara</ul>
+      <ul style="display:block" class="btn">Amy</ul>
+      <ul style="display:block" class="btn">Brian</ul>
+      <ul style="display:block" class="btn">Bryce</ul>
+      <ul style="display:block" class="btn">Danny</ul>
+      <ul style="display:block" class="btn">David O</ul>
+      <ul style="display:block" class="btn">Devin</ul>
+      <ul style="display:block" class="btn">Lyndsey</ul>
+      <ul style="display:block" class="btn">Ted</ul>
+    </li>
+    <li style="width:50%;display:inline-block;float:right;text-align:center">
+      <ul style="display:block" class="btn">Allie</ul>
+      <ul style="display:block" class="btn">David S</ul>
+      <ul style="display:block" class="btn">Mario</ul>
+      <ul style="display:block" class="btn">Nils</ul>
+    </li>
+  </div>
+
+<!-- Post to Chatter Button -->
+  <a id='chatter_button' class='btn btn-large btn-inverse btn-blue' data-toggle="modal" data-target=".modal_sfdc" ><i class="icon-envelope" id='chatter_env'></i>Notify Sales Via Chatter</a>
+  
+<!-- Change From Button [DEPRECATED]-->
+<!--  <span id="open-close" class="fromAddressLinkHeader btn btn-inverse btn-blue"><i class="icon-plus"></i>Change From Address</span>-->
+  
+<!-- Form Options  -->
+<!--
+  <div id="form_options" style="display:none;">
+
+    <a class="btn" id="btnSentVia" data-toggle="modal" data-target="#appModal"><span class="appModal"><i class="icon-user"></i>Change Email Sent From</span></a>
+    <a id="btnSendMobile" class="btn"><span class="Chatter"><i class="icon-user"></i>Sent From Mobile Support</span></a>
+
+    <div class="recipientWrapper">
+      <select id='newRecipient'>
+        <option value="support@optimizely.com">support@optimizely.com</option>
+        <option value="accounting@optimizely.com">accounting@optimizely.com</option>
+        <option value="mobile-support@optimizely.com">mobile-support@optimizely.com</option>
+      </select>
+
+      <span id="saveSentVia" class="btn appModal btn-inverse">Save</span>
+      <span class="helpText"><i>Changing this field will update who the email is sent from.</i></span>
+    </div>
+  </div> 
+-->
+
+<!--   Account lookup links [DEPRECATED]-->
+<!--<span id="account_lookup_links" class="accountLinkHeader btn btn-inverse btn-blue"><i class="icon-search"></i>Account Lookup Links</span>-->
+<!--
+
+<div id="linkWrapper">
+  <section data-links/>
+-->
+
+<!-- Not sure these are necessary/functional -->
+  <!-- <input type="checkbox" id="linksetting"/>&nbsp;<label for="linksetting">Keep Account Links Expanded</label>&nbsp;
+  <input type="checkbox" id="countrysetting"/>&nbsp;<label for="countrysetting">EMEA User</label>  -->
+<!--</div>-->
+
+
+
+<!-- KB Article Links -->
+  <span id="kb_links" class="kbLinkHeader btn btn-inverse btn-blue"><i class="icon-book"></i>KB Article Links</span>
+
+  <div id="articleWrapper" style="display:none;">
+    <ul>
+      <li><a target="_blank" href="https://help.optimizely.com/hc/en-us/articles/200039995?utm_source=zendesk&utm_medium=opty_app&utm_content=integrating_with_ua&utm_campaign=education">Integrating Optimizely with Google UA</a></li>
+      <li><a target="_blank" href="https://help.optimizely.com/hc/en-us/articles/201876450?utm_source=zendesk&utm_medium=opty_app&utm_content=audiences_descriptions&utm_campaign=education">Audience conditions: Descriptions and examples</a>
+      <li><a target="_blank" href="https://help.optimizely.com/hc/en-us/articles/200040095?utm_source=zendesk&utm_medium=opty_app&utm_content=implement_snippet&utm_campaign=education">Implement the Optimizely Snippet</a></li>
+      <li><a target="_blank" href="https://help.optimizely.com/hc/en-us/articles/200040675?utm_source=zendesk&utm_medium=opty_app&utm_content=redirect_experiments&utm_campaign=education">Redirect experiments: Test separate URLs </a></li>
+      <li><a target="_blank" href="https://help.optimizely.com/hc/en-us/articles/200107480?utm_source=zendesk&utm_medium=opty_app&utm_content=force_variation_parameters&utm_campaign=education">Force Variation Parameters</a></li>
+      <li><a target="_blank" href="https://help.optimizely.com/hc/en-us/articles/200133789?utm_source=zendesk&utm_medium=opty_app&utm_content=how_long_run_test&utm_campaign=education">How Long to Run a Test</a></li>
+      <li><a target="_blank" href="https://help.optimizely.com/hc/en-us/articles/200179074?utm_source=zendesk&utm_medium=opty_app&utm_content=editor_troubleshooting&utm_campaign=education">Troubleshooting: Pages not loading in the Editor</a></li>
+      <li><a target="_blank" href="https://help.optimizely.com/hc/en-us/articles/200040835?utm_source=zendesk&utm_medium=opty_app&utm_content=url_targeting&utm_campaign=education">URL Targeting</a></li>
+      <li><a target="_blank" href="https://help.optimizely.com/hc/en-us/articles/200039915?utm_source=zendesk&utm_medium=opty_app&utm_content=goals_measure_success&utm_campaign=education">Goals: Measure the success of your experiment</a></li>
+      <li><a target="_blank" href="https://help.optimizely.com/hc/en-us/articles/200040055?utm_source=zendesk&utm_medium=opty_app&utm_content=pricing_plan_changes&utm_campaign=education">Optimizely Pricing Plan Changes</a></li>
+    </ul>
+  </div>
+
+<!-- Knowledge Dump Button [DEPRECATED] -->
+<!--  <a id='knowledge_dump' class='btn btn-large btn-inverse btn-blue' target='_blank' href="https://docs.google.com/document/d/1W6TMtB1zBGYKpDE5oOS9dzKgDOMFTgKwTLodJCFgJaY/edit"><i class="icon-file"></i>Troubleshooting Guide</a>-->
+
+<!-- Jira Button [DEPRECATED]-->
+<!--
+  <a id='jira_dashboard' class='btn btn-large btn-inverse btn-blue' target='_blank' href="https://optimizely.atlassian.net/secure/Dashboard.jspa"><i class="icon-cog"></i>JIRA Dashboard</a>
+
+<hr />
+-->
+
+<!-- Feedback Link [MOVED TO BOTTOM] -->
+
+<!--
+<a id="feedback_link" class='btn btn-large btn-inverse btn-blue' target='_blank' href="https://optimizely.atlassian.net/secure/CreateIssueDetails!init.jspa?pid=14702&issuetype=3&priority=3&customfield_13500=12401&summary=Opty+App+Feedback&description=Write+feedback+here">
+    <i class="icon-list-alt"></i>Give Feedback
+  </a>  
+-->
+
+<hr />
+
+<!-- Account Notes Links Opt 1 ('click span.notesHeader':'toggleNotes1') -->
+    
+<span id="account_notes" class="notesHeader btn btn-inverse btn-blue"><i class="icon-comment"></i>Account Notes</span>
+
+  <div id="notesWrapper" style="display:block;">
+      <section account-notes/>
+  </div>
+
+<!-- end option 1 -->
+
+
+
+<div id="appmessages"></div>
+</div>
+
+
+
+
+<!-- Modal General Screen ------------------------------------------------------------------------------------------------------>
+
+
+<div class="modal hide fade modal_sfdc" tabindex="-1" role="dialog" aria-labelledby="modalSFDC" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 class="my_modal_label">Sales Chatter Notification</h3>
+  </div>
+  <div class="modal-body">
+          
+  <!--------------------------------Modal Body - Loading Screen -----------------------------------Start-->
+
+          <div id="loading" class="show"> 
+        <h3 align="center" id="loadingheader">Please wait as we search for an SFDC Account, Contact, or Lead</h3><br>{{spinner "dotted"}}
+        </div>
+
+  <!-------------------------------Modal Body - Loading Screen -------------------------------------End-->
+
+
+   <!--------------------------------Modal Body - Confirmation Screen -----------------------------------Start-->
+         <div id='confirmation' class="hide">
+
+           <b><span id="ccheader">Header Text Would Go Here</span></b>
+          <br>
+          <p>An SFDC <span class="RecordType"> RECORD TYPE PLACEHOLDER </span> was found. A chatter message will be posted on that <span class="RecordType"> RECORD TYPE PLACEHOLDER </span> to the owner listed on the <span class="RecordType"> RECORD TYPE PLACEHOLDER </span> . Please review the message and make any updates, prior to confirming the post.</p>
+          <br>
+          <b><span class="RecordType"> RECORD TYPE PLACEHOLDER </span> ID </b>= <span id="RecordId"></span><br>
+          <b><span class="RecordType"> RECORD TYPE PLACEHOLDER </span> Name </b>=<span id="RecordName"></span><br>
+          <b><span class="RecordType" > RECORD TYPE PLACEHOLDER </span> <span id="ownertype">Owner</span> </b>=<span id="RecordOwner"></span><br>
+          <b>SDR Lead </b>=<span id="SDRLead">SDR LEAD PLACEHOLDER</span> <i>(always copied)</i><br><br>
+             <span><b><a id="changeSDR" class='btn btn-inverse'>Change Record Owner</a></b> 
+             <select id="usSDR" class="hide"></select>
+             <select id="euSDR" class="hide"></select> <a id="cancelSDR" class='btn btn-inverse hide'>Cancel</a><br>
+          <br>
+          
+
+
+           <p><b>Chatter Message:</b><textarea rows="5" cols="100" name="chattermessage">CHATTER MESSAGE PLACEHOLDER</textarea></p><i>Please make any updates if necessary</i><br>
+
+  
+      </div>
+   <!-------------------------------Modal Body - Confirmation Screen -------------------------------------End-->
+
+   <!--------------------------------Modal Body - New Lead Screen -----------------------------------Start-->
+        <div id='newlead' class="hide">
+
+           <b><span id="leadheader">Header Text Would Go Here</span></b>
+           <br>
+           <p> An account was not found via the account or contact record. A lead was also not found, so a new one has to be created. Please confirm the information below prior to creating the lead in SFDC..</p>
+         <div class="row"><div class="leadr">Lead Last Name:</div><span><input type='text' name='leadln' value='' /></span></div>
+         <div class="row"><div class="leadr">Lead First Name:</div><span><input type='text' name='leadfn' value='' /></span></div>
+         <div class="row"><div class="leadr">Lead Company:  </div><span><input type='text' name='leadcompany' value='' /></span></div>
+        <div><span><i>Lead Source will be <span id="leadsource">LeadSourcePlaceholder</span>, with a Lead Status of <span id="leadstatus">LeadStatusGoesHere</span></i></div>
+
+
+
+        <br><br>
+
+  
+     </div>
+   <!-------------------------------Modal Body - New Lead Screen -------------------------------------End-->
+
+   <!--------------------------------Modal Body - New Lead Confirmation Screen -----------------------------------Start-->
+
+       <div id='leadconf' class="hide">
+
+           <b><span id="leadheader">Lead Successfully Created in SFDC</span></b>
+           <br>
+           <p> A Lead was successfully created in SFDC. After a lead is created, a data enrichment process is performed to assign the lead based on industry & Alexa rating. The process can take anywhere from a minute to five minutes to complete. You can proceed with one of three options:
+           <ol class="leadoptions"><li>Close this window, continue working, and manually come back in 5 minutes to post to Chatter.</li>
+           <li>Manually check the lead, and look at lead history to see if the data enrichment process is done. </li>
+           <li>Proceed with the chatter notification, and have the system wait 5 minutes </li></ol></p>
+  
+         <p class="leadlink"> Link to Lead in SFDC - <a id="leadlink" href="" target="_blank">Link Placeholder</a></p>
+
+
+  
+     </div>
+     <!-------------------------------Modal Body - New Lead Confirmation Screen -------------------------------------End-->
+      <!-----------------------------Modal Body - General Message Screen -------->
+          <div id="showmessage" class="hide">
+         
+     </div>
+     <!-----------------------------Modal Body - General Message Screen -------->
+  </div>
+  <div class="modal-footer">
+    <button  class="btn btn-inverse hidden" aria-hidden="true" id="createlead">Create Lead</button>
+    <button class="btn btn-inverse hidden" aria-hidden="true" id="leadcontinue">Continue with Notification (5 min wait)</button>
+    <button class="btn btn-inverse hidden" aria-hidden="true" id="postchatter">Post to Chatter</button>
+    <button class="btn btn-inverse hidden" aria-hidden="true" id="switchlead">Switch to EU Lead</button>
+    <button class="btn btn-inverse " data-dismiss="modal" aria-hidden="true" id="closetext">Close</button>
+  </div>
+</div>
+
+
