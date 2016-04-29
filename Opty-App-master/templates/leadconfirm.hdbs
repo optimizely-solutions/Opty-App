@@ -1,0 +1,19 @@
+<div id='Confirmation2'>
+
+<b>Step {{step}} - Confirm Lead Creation</b>
+<br>
+<p> An account was not found via the account or contact record. A lead was also not found, so a new one has to be created. Please confirm the information below prior to creating the lead in SFDC..</p>
+<br>
+<p><span style="float: left">Lead Last Name :</span><span style="float: right"><input type='text' name='leadln' value='{{LeadName}}' /></span></p>
+<p><span style="float: left">Lead First Name : </span><span style="float: right"><input type='text' name='leadfn' value='' /></span></p>
+<p><span style="float: left">Lead Company : </span><span style="float: right"><input type='text' name='leadcompany' value='{{LeadCompany}}' /></span></p><br>
+<p><span style="float: left"><i>Lead Source will be {{LeadSource}}, with a Lead Status of {{LeadStatus}}</i></p>
+
+
+
+<br><br>
+    <button type="submit" class="buttons" id="btnLeadConf">Confirm Lead Creation</button>
+    <button type="submit" class="buttons cancel" id="btnCancel">Cancel</button>
+
+  
+</div>

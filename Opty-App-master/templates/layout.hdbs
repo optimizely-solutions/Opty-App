@@ -1,0 +1,22 @@
+<header>
+  <span class="logo"/>
+  <h3>Opty App</h3> <!-- main app title in ZenDesk -->
+  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+  
+</header>
+
+<section data-main />
+
+<footer>
+
+    <a class='right' target='_blank' href="https://optimizely.atlassian.net/secure/CreateIssueDetails!init.jspa?pid=14702&issuetype=3&priority=3&summary=Opty+App+Feedback&description=Write+feedback+here&components=13101">
+    Give Feedback
+  </a>  
+    
+<!--    Email ZD Support link [DEPRECATED]-->
+<!--
+   <a class="right" href="mailto:support@zendesk.com" target="new">
+    Email ZD Support
+  </a>  
+-->
+</footer>
