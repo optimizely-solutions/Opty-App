@@ -785,7 +785,13 @@ events: {
                       this.accountMrr=data.organizations[0].organization_fields.account_mrr;
                       this.orgDetails=data.organizations[0].details;
                  //based on the 'High-Risk Account' checkbox at the org level
-                      data.organizations[0].churn_risk === true ? this.churnRisk='yes' : this.churnRisk='no';
+                      //data.organizations[0].churn_risk === true ? this.churnRisk='yes' : this.churnRisk='no';
+                    if (data.organizations[0].churn_risk === true){
+                        this.churnRisk='yes';
+                    }
+                    else {
+                        this.churnRisk='no';
+                    }
                       //this.churnRisk=data.organizations[0].churn_risk;
                       this.subscription_id=data.organizations[0].organization_fields.subscription_id;
 
