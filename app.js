@@ -296,11 +296,13 @@ events: {
       this.getToken();
 
       
-      //Get the basic ticket information to load the initial app home screen. 
+     //Get the basic ticket information to load the initial app home screen. 
       var currentTicket = this.ticket();
       var currentClient = currentTicket.requester();
       this.requesterID = currentTicket.requester().id();
-      var imp_email = currentTicket.customField('custom_field_21047815')||'';
+      var org = currentTicket.organization();
+      var user = currentTicket.requester();
+      var imp_email = user.email()||'';
 
       //Adding impersonate by experiment id button
       var experimentId = currentTicket.customField('custom_field_22559284')||'';
@@ -310,98 +312,30 @@ events: {
       //function to check if the ticket was sent to internal-support@ and change the Sent Via field to support@ if necessary
       this.checkIfInternal();
 
-      //Get recipient email address to show on the home screen
-      var UserAPIURL = "/api/v2/tickets/"+this.ticket().id()+".json";
-      /*
-      this.ajax('fetchZendeskData', UserAPIURL)
-              .done(function(data) {
-                this.consoleDebug("object","InitialUserObject:",data);
-                 this.recipient = data.ticket.recipient || "support@optimizely.com";
-                 this.$('#recipient').text(this.recipient);
-                 console.log(currentTicket.customField('custom_field_21226130'),this.recipient);
-                 if (currentTicket.customField('custom_field_21226130') !== this.recipient) {
-                    console.log("running 1");
-                    currentTicket.customField('custom_field_21226130',this.recipient);
-                    this.ticket().save();
-                 }
-                 this.checkRecipient(true);
-               })
-              .fail(function(data){
-                 this.consoleDebug("object","InitialUserObject Request Failed",data);
-                 this.recipient= "support@optimizely.com";
-                 this.$('#recipient').text(this.recipient);
-                 if (currentTicket.customField('custom_field_21226130') !== this.recipient) {
-                    console.log("running 2");
-                    currentTicket.customField('custom_field_21226130',this.recipient);
-                 }
-                 this.checkRecipient(true);
-              });
-        */
+//      //Get recipient email address to show on the home screen
+//      var UserAPIURL = "/api/v2/tickets/"+this.ticket().id()+".json";
+      
 
       //If the impersonation email is blank, then check the impersonation email at the user level. If that is empty, check it at the org level
       //Sets the user email used for the impersonate button, and updates the ticket impersonate field 
       if (imp_email.trim() ==="" || imp_email==="null"){
+          //Look at User Impersonation field. If not blank, then set as override Email. If Blank, check Org Impersonation field
+          imp_email= data.user.user_fields.impersonation_email ||'';
 
-            //Get the IMpersanation field at the User Level
-            UserAPIURL = "/api/v2/users/"+this.requesterID+".json";
-            this.ajax('fetchZendeskData', UserAPIURL)
-                .done(function(data) {
-                  //Write to console when in debug mode
-                  this.consoleDebug("object",'ZD User Object (Check Impersonation):',data);
-                  
-                  //Look at User Impersonation field. If not blank, then set as override Email. If Blank, check Org Impersonation field
-                  imp_email= data.user.user_fields.impersonation_email ||'';
+          //If imp_email is not empty, then update the userEmail and set the customField. Else get check the org to see if the custom field is set there
 
-                  //If imp_email is not empty, then update the userEmail and set the customField. Else get check the org to see if the custom field is set there
-                  
-                  if (imp_email.trim ==='' || imp_email===null){
-                    this.userEmail=imp_email.trim();
-                    currentTicket.customField('custom_field_21047815', imp_email);
-                  }
-                  else {
-                         //Get the User Impersonation field at the Org Level
-                         var UserAPIURL = "/api/v2/users/"+this.requesterID+"/organizations.json";
-                         this.ajax('fetchZendeskData', UserAPIURL)
-                            .done(function(data) {
-                                 //Write to console when in debug mode
-                                 this.consoleDebug("object",'ZD Group Object:',data);
-
-                               //Check to make sure Organization Exists, if it doesn't then proceed to loading the app without updating anything
-                               if (data.count >0){
-                                   imp_email= data.organizations[0].organization_fields.impersonation_email ||'';
-                                   if (imp_email !==''|| imp_email ===null){
-                                      this.userEmail = imp_email;
-                                      currentTicket.customField('custom_field_21047815',imp_email);
-                                      this.AppInitialized();
-                                   }
-                                   else {
-                                     //If impersonation email is empty at org, then use the existing users email for impersonation
-                                     this.userEmail = currentClient.email();
-                                     this.AppInitialized();
-                                   }
-
-                                }
-                                else {
-                                  //If the org data isn't returned, then assume the field is empty and use the existing users email for impersonation
-                                  this.userEmail = currentClient.email();
-                                  this.AppInitialized();
-                                }
-                              
-                               });
-                   }  
-
-            });
+          if (imp_email.trim ==='' || imp_email===null){
+            this.userEmail=imp_email.trim();
+            currentTicket.customField('custom_field_21047815', imp_email);
+          }
       }
       else {
         //If it wasn't null or empty, then set the impersonation field as the userEmail
         this.userEmail = imp_email.trim();
         this.AppInitialized();
       }
-
      },
                               
-
-
      AppInitialized: function(){
      //REnders the APP UI after all of the data is initialized
 
@@ -461,7 +395,7 @@ events: {
       //Get SDR Users for the SFDC App for US & EU
       this.getSDR("#usSDR"); this.getSDR("#euSDR");
 
-     //[Account notes functionality] gather account information to make available for TSRs 
+     //[Account notes functionality] gather account information to make available for TSEs 
       this.getAccountInfo();
          
      },
@@ -486,13 +420,7 @@ events: {
 
 
     toggleAccountLinks: function(){
-      
-//      //Logic to toggle the Account Lookup Links
-//      if (this.$('.accountLinkHeader i.icon-plus').length===0){
-//        this.$('.accountLinkHeader i').attr('class', 'icon-plus');
-//      } else {
-//        this.$('.accountLinkHeader i').attr('class', 'icon-minus');
-//      }
+
         return this.$('section[data-links]').slideToggle();
       },
 
@@ -766,72 +694,50 @@ events: {
 
              //Set Ticket Information into variables and store them into local storage
              var currentTicket = this.ticket();
-             this.TktEmail = currentTicket.requester().email();
-             this.TktName = currentTicket.requester().name();
-             this.TktUserId = currentTicket.requester().id();
-             this.TktSubject = currentTicket.subject();
+//             this.TktEmail = currentTicket.requester().email();
+//             this.TktName = currentTicket.requester().name();
+//             this.TktUserId = currentTicket.requester().id();
+//             this.TktSubject = currentTicket.subject();
+             var org = currentTicket.organization();
+             var user = currentTicket.requester();
 
-             console.log("normal","getAccountInfo - Info - Basic Ticket Information -  Email= "+this.TktEmail +"; Name = "+this.TktName+"; UserID= "+this.TktUserId+"; Org="+this.OrgName);
-
+        
              //Use the Zendesk API to get the Org data
              //example URL: https://optimizely.zendesk.com/api/v2/users/1070462067/organizations.json
-             var OrgAPIURL = "/api/v2/users/"+this.TktUserId+"/organizations.json";
-             this.ajax('fetchZendeskData', OrgAPIURL)
-                .done(function(data) {
-                  
-                  //Function that processes the request after the API call to Zendesk is made
-
-                  //Debug Mode & Debug Object Mode - Log to Console
-                  console.log("object",'Fetch Zendesk Org Data Object: ',data);
-     
-                  //Pass data to local variables
-                      this.orgId=data.organizations[0].organization_fields.id;
-                      this.accountName=data.organizations[0].name;
-                      this.csm=data.organizations[0].organization_fields.zendesk_assigned_csm;
-                      this.subscriptionMrr=data.organizations[0].organization_fields.subscription_mrr;
-                      this.renewal=data.organizations[0].organization_fields.subscription_start_date;
-                      this.solutionsPartner=data.organizations[0].organization_fields.partner_name;
-                      this.accountMrr=data.organizations[0].organization_fields.account_mrr;
-                      this.orgDetails=data.organizations[0].details;
+                      this.accountName=org.name();
+                      this.csm=org.customField("zendesk_assigned_csm");
+                      this.subscriptionMrr=org.customField("subscription_mrr");
+                      this.renewal=org.customField("subscription_start_date");
+                      this.solutionsPartner=org.customField("partner_name");
+                      this.accountMrr=org.customField("account_mrr");
+                      this.orgDetails=org.customField("details");
                  //based on the 'High-Risk Account' checkbox at the org level
                       //data.organizations[0].churn_risk === true ? this.churnRisk='yes' : this.churnRisk='no';
-                    if (data.organizations[0].churn_risk === true){
+                    if (org.churn_risk === true){
                         this.churnRisk='yes';
                     }
                     else {
                         this.churnRisk='no';
                     }
                       //this.churnRisk=data.organizations[0].churn_risk;
-                      this.subscription_id=data.organizations[0].organization_fields.subscription_id;
-
+                      this.subscription_id=org.customField("subscription_id");
 
              //End get org information
-             });
-            
-            //Use the Zendesk API to get the Contact data
-            //example URL: https://optimizely.zendesk.com/api/v2/users/1070462067/organizations.json
-             var UserAPIURL = "/api/v2/users/"+this.TktUserId+".json";
-             this.ajax('fetchZendeskData', UserAPIURL)
-                .done(function(data) {
-                  
-                  //Function that processes the request after the API call to Zendesk is made
-
-                  //Debug Mode & Debug Object Mode - Log to Console
-                  console.log("object",'Fetch Zendesk contact Data Object: ',data);
      
-                  //Pass data to local variables
-                    this.contactName=data.user.name;
-                    this.timeZone=data.user.time_zone;
-                    this.phone=data.user.user_fields.user_phone_number;
-                    this.developerCertified=data.user.user_fields.developer_certified_user;
-                    this.platformCertified=data.user.user_fields.platform_certified_user;
-                    this.recentTickets=data.user.user_fields.tickets_closed_this_month;
-                    this.userDetails=data.user.details;
-                    this.zendesk_salesforce_contact_id=data.user.user_fields.zendesk_salesforce_contact_id;
-
+            //Use the Zendesk API to get the User data
+            //example URL: https://optimizely.zendesk.com/api/v2/users/1070462067.json      
+            //Pass data to local variables
+                    this.contactName=user.customField("user.name");
+                    this.timeZone=user.customField("time_zone");
+                    this.phone=user.customField("user_phone_number");
+                    this.developerCertified=user.customField("developer_certified_user");
+                    this.platformCertified=user.customField("platform_certified_user");
+                    this.recentTickets=user.customField("tickets_closed_this_month");
+                    this.userDetails=user.details();
+                    this.zendesk_salesforce_contact_id=user.customField("zendesk_salesforce_contact_id");
 
              //End get contact information
-             });
+
             
             
                //Set default Salesforce links to the overview pages for contacts, accounts and subscription
@@ -843,8 +749,8 @@ events: {
               if (this.subscription_id !== undefined) {
                 orgUrl = "https://c.na28.visual.force.com/apex/Skuid_SubscriptionDetail?id=" + this.subscription_id + "&sfdc.override=1";
               }
-              if (this.orgId !== undefined) {
-                accUrl = "https://c.na28.visual.force.com/apex/Skuid_AccountDetail?id=" + this.orgId + "&sfdc.override=1";
+              if (this.org !== undefined) {
+                accUrl = "https://c.na28.visual.force.com/apex/Skuid_AccountDetail?id=" + this.org + "&sfdc.override=1";
               }
               if (this.zendesk_salesforce_contact_id !== undefined) {
                 userUrl = "https://c.na28.visual.force.com/apex/Skuid_ContactDetail?id=" + this.zendesk_salesforce_contact_id + "&sfdc.override=1";
