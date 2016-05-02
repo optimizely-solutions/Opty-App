@@ -49,6 +49,15 @@ requests: {
                   data: dataobject
                 };
             },
+            
+            updateOrgNotes: function(subdomain, org_id, dataObject) {
+                return {
+                  url: '/api/v2/organizations/' + org_id + '.json',
+                  type: 'PUT',
+                  dataType: 'json',
+                  data: dataObject
+                };
+            },
 
 
 //General Rquest Functions  End Here -------------------------------------------------------------------------------------->
@@ -195,6 +204,8 @@ events: {
       'click a.notes_link':'toggleAccountNotes',
       'click #collaborator_button': 'openCollaborator',
       'click #collaborators li ul': 'addCollaborator',
+      'click #add_notes': 'this.updateAccNotes',
+      'blur #acc_notes_input': 'this.saveAccNotes',
 
 
 //General Event Calls End Here -------------------------------------------------------------------------------------->
@@ -320,7 +331,7 @@ events: {
       //Sets the user email used for the impersonate button, and updates the ticket impersonate field 
       if (imp_email.trim() ==="" || imp_email==="null"){
           //Look at User Impersonation field. If not blank, then set as override Email. If Blank, check Org Impersonation field
-          imp_email= data.user.user_fields.impersonation_email ||'';
+          imp_email= user.user_fields.impersonation_email ||'';
 
           //If imp_email is not empty, then update the userEmail and set the customField. Else get check the org to see if the custom field is set there
 
@@ -694,10 +705,6 @@ events: {
 
              //Set Ticket Information into variables and store them into local storage
              var currentTicket = this.ticket();
-//             this.TktEmail = currentTicket.requester().email();
-//             this.TktName = currentTicket.requester().name();
-//             this.TktUserId = currentTicket.requester().id();
-//             this.TktSubject = currentTicket.subject();
              var org = currentTicket.organization();
              var user = currentTicket.requester();
 
@@ -710,7 +717,7 @@ events: {
                       this.renewal=org.customField("subscription_start_date");
                       this.solutionsPartner=org.customField("partner_name");
                       this.accountMrr=org.customField("account_mrr");
-                      this.orgDetails=org.customField("details");
+                      this.accountNotes=org.customField("zendesk_account_notes");
                  //based on the 'High-Risk Account' checkbox at the org level
                       //data.organizations[0].churn_risk === true ? this.churnRisk='yes' : this.churnRisk='no';
                     if (org.churn_risk === true){
@@ -733,7 +740,6 @@ events: {
                     this.developerCertified=user.customField("developer_certified_user");
                     this.platformCertified=user.customField("platform_certified_user");
                     this.recentTickets=user.customField("tickets_closed_this_month");
-                    this.userDetails=user.details();
                     this.zendesk_salesforce_contact_id=user.customField("zendesk_salesforce_contact_id");
 
              //End get contact information
@@ -790,17 +796,36 @@ events: {
                         developerCertified: this.developerCertified,
                         platformCertified: this.platformCertified,
                         recentTickets: this.recentTickets,
-                        orgDetails: this.orgDetails,
-                        userDetails: this.userDetails,
+                        accountNotes: this.accountNotes,
                         sfdcSubscription: this.sfdcSubscription,
                         sfdcAccount: this.sfdcAccount,
                         sfdcUser: this.sfdcUser    
                 }));
 
             
-            
         //End getAccountInfo function
         },
+      
+        updateAccNotes: function() {
+            var curText = this.ticket().organization().customField("zendesk_account_notes");
+            this.$("#acc_notes_input").css({"height":this.$("#add_notes table").height(),"display":"inline-block"});
+            this.$("#add_notes table").hide();
+            this.$("#acc_notes_input").val(curText);
+        },
+
+        saveAccNotes: function() {
+          var subdomain = "optimizely";
+          var curText = this.$("#acc_notes_input").val();
+          var org = this.ticket().organization();
+          var orgId = org.id();
+          org.customField("zendesk_account_notes", curText);
+
+          this.ajax('updateOrgNotes', subdomain, orgId, org).done(function(data) {
+            this.$("#add_notes table").text(org.customField("zendesk_account_notes"));
+          });
+        },
+        
+
 
 
       sfdcGetInfo: function () {
