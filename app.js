@@ -193,6 +193,8 @@ events: {
       'click #btnSendMobile':'changeRecipientMobile',
       'click a.validation':'validateExperimentId',
       'click a.notes_link':'toggleAccountNotes',
+      'click #collaborator_button': 'openCollaborator',
+      'click #collaborators li ul': 'addCollaborator',
 
 
 //General Event Calls End Here -------------------------------------------------------------------------------------->
@@ -520,17 +522,24 @@ events: {
                 this.$("#subscription_notes").removeClass("hide");
             }
       },
-      
-      //Logic to toggle the KB article Links with icon-plus/icon-minus
-      // if (this.$('.kbLinkHeader i.icon-plus').length===0){
-      //   this.$('.kbLinkHeader i').attr('class', 'icon-plus');
-      //   // this.$('.articleWrapper').css({"display":"none", "visibility":""});
-      // } else {
-      //   this.$('.kbLinkHeader i').attr('class', 'icon-minus');
-      //   // this.$('.articleWrapper').css({"display":"block", "visibility":"visible"});
-      // }
-      //   return this.$('#articleWrapper').slideToggle();
-      // },
+
+      openCollaborator: function() {
+        if(this.$("#collaborators").hasClass("hide")) {
+            this.$("#collaborators").removeClass("hide");
+            }
+        else {
+          this.$("#collaborators").addClass("hide");
+            }
+      },
+
+      addCollaborator: function(element) {
+
+        // Adds a tag with the collaborator's name
+        ticket = this.ticket();
+        tags = ticket.tags();
+        TSE_NAME = "collaborator_" + element.toElement.innerHTML.toLowerCase().split(" ").join("_");
+        tags.add(TSE_NAME);
+      },
 
     updateImpersonate:function(){
     //function to update the impersonate email when the user changes it
