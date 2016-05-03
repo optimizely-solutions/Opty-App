@@ -474,9 +474,9 @@ events: {
       addCollaborator: function(element) {
 
         // Adds a tag with the collaborator's name
-        ticket = this.ticket();
-        tags = ticket.tags();
-        TSE_NAME = "collaborator_" + element.toElement.innerHTML.toLowerCase().split(" ").join("_");
+        var ticket = this.ticket();
+        var tags = ticket.tags();
+        var TSE_NAME = "collaborator_" + element.toElement.innerHTML.toLowerCase().split(" ").join("_");
         tags.add(TSE_NAME);
       },
 
