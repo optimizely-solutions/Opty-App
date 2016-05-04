@@ -102,25 +102,6 @@ a.optimizely_link, a.recurly_link, a.appengine_link, a.random_link {
   padding-bottom: 10px;
 }
 
-/*#chatter_button, #open-close, #account_lookup_links, #knowledge_dump, #jira_dashboard, #kb_links, #feedback_link, #account_notes {
-  width:90%;
-  display: block;
-  background: linear-gradient(#326bac,#1c5ba3); 
-  border: 2px none;
-  color: white;
-  margin:5px auto 5px auto;
-  font-size:1em;
-}
-
-#impersonate_button, #impersonate_experiment, #view_results, #view_exports{
-  width:40%;
-  float:right;
-  display: block;
-  background: linear-gradient(#326bac,#1c5ba3); 
-  color: white;
-  margin: 5px;
-  font-size:1em;
-}*/
 
 /* Important class to overwrite black buttons */
 
@@ -279,20 +260,6 @@ td.title {
   width:100%;
 }
 
-/*
-#acc_notes_input {
-  padding:2%;
-  display:inline-block;
-  min-height:50px;
-  width:100%;
-  -webkit-box-shadow: inset 2px 2px 2px 1px rgba(199,199,199,1);
-  -moz-box-shadow: inset 2px 2px 2px 1px rgba(199,199,199,1);
-  box-shadow: inset 2px 2px 2px 1px rgba(199,199,199,1);
-  border: 1px solid rgba(199,199,199,1);
-  border-radius: 2px;
-}
-*/
-
 
 /*End styles for account notes*/
 
@@ -308,6 +275,19 @@ footer {
 
 .left {
   float:left;
+}
+
+.col {
+ width:45%;
+}
+
+.btn-white-small {
+    width:100%;
+}
+
+#collaborators{
+    width: 90%;
+    text-align: center;
 }
 
 #newRecipient {

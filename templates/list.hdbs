@@ -17,6 +17,36 @@
   <a id='view_exports' class='btn btn-large btn-inverse validation btn-small' {{link10}} target='_blank' style="margin-right:7px;"><i class="icon-th-list"></i>Exports</a>
 
   <hr style="float:clear;margin-top:40px" />
+    
+<!-- Add Collaborator Links -->
+  <span id="collaborator_button" class="btn btn-inverse btn-blue"><i class="icon-user"></i>Add Collaborator</span>
+
+  <div id="collaborators" style="display:none;">
+    <div class="col left">
+        <p>San Francisco</p>
+      <ul>
+          <li class="btn-white-small btn">Amara</li>
+          <li class="btn-white-small btn">Amy</li>
+          <li class="btn-white-small btn">Brian</li>
+          <li class="btn-white-small btn">Bryce</li>
+          <li class="btn-white-small btn">Danny</li>
+          <li class="btn-white-small btn">David O</li>
+          <li class="btn-white-small btn">Devin</li>
+          <li class="btn-white-small btn">Lyndsey</li>
+          <li class="btn-white-small btn">Ted</li>
+      </ul>
+    </div>
+    <div class="col right">
+        <p>Amsterdam</p>
+      <ul>
+          <li class="btn-white-small btn">Allie</li>
+          <li class="btn-white-small btn">David S</li>
+          <li class="btn-white-small btn">Mario</li>
+          <li class="btn-white-small btn">Nils</li>
+      </ul>
+    </div>
+  </div>
+<div style="clear:both"></div>
 
 <!-- Post to Chatter Button -->
   <a id='chatter_button' class='btn btn-large btn-inverse btn-blue' data-toggle="modal" data-target=".modal_sfdc" ><i class="icon-envelope" id='chatter_env'></i>Notify Sales Via Chatter</a>

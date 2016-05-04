@@ -203,7 +203,7 @@ events: {
       'click a.validation':'validateExperimentId',
       'click a.notes_link':'toggleAccountNotes',
       'click #collaborator_button': 'openCollaborator',
-      'click #collaborators li ul': 'addCollaborator',
+      'click #collaborators li': 'addCollaborator',
       'click #add_notes': 'this.updateAccNotes',
       'blur #acc_notes_input': 'this.saveAccNotes',
 
@@ -445,6 +445,11 @@ events: {
               return this.$('#notesWrapper').slideToggle();
       },
       
+      openCollaborator: function(){
+  
+              return this.$('#collaborators').slideToggle();
+      },
+      
       /*-- Allows for toggling bewtween subscription and contact levels --*/
       
       toggleAccountNotes: function() {
@@ -462,14 +467,14 @@ events: {
             }
       },
 
-      openCollaborator: function() {
-        if(this.$("#collaborators").hasClass("hide")) {
-            this.$("#collaborators").removeClass("hide");
-            }
-        else {
-          this.$("#collaborators").addClass("hide");
-            }
-      },
+//      openCollaborator: function() {
+//        if(this.$("#collaborators").hasClass("hide")) {
+//            this.$("#collaborators").removeClass("hide");
+//            }
+//        else {
+//          this.$("#collaborators").addClass("hide");
+//            }
+//      },
 
       addCollaborator: function(element) {
 
