@@ -587,27 +587,40 @@
     },
     SaveUpdates: function() {
       //Function to run code when the Ticket is saved (user hits Submit)
+      var ticket = this.ticket();
+      var status = ticket.status();
+      var form = ticket.form().id();
+      // Prevent ticket from being put in pending status unless Managing Team, Case Category and Case Type are filled out
+      if (status === "pending") {
+        try {
+          var manTeam = ticket.customField("custom_field_24732737");
+          var caseCat = ticket.customField("custom_field_22597344");
+          var caseType = ticket.customField("custom_field_21129370");
 
-      if (this.ticket().customField('custom_field_21047815') !== '' && this.ticket().customField('custom_field_21047815') !== null && this.ticket().customField('custom_field_21047815') !== 'null') {
-        this.consoleDebug("normal", "OptyApp - Save ticket requested. Going to update impersonation field");
-        //Update Impersonation Email at User Level upon ticket save
-        var dataObject = {
-          "user": {
-            "user_fields": {
-              "impersonation_email": this.ticket().customField('custom_field_21047815')
-            }
+          // If no value selected, prevent save
+          if (manTeam.length === 0 || caseCat.length === 0 || caseType.length === 0) {
+            return "The ticket was not updated. Please check 'Managing Team', 'Case Category' and 'Case Type' are set before re-saving.";
           }
-        };
-        var UserAPIURL = "/api/v2/users/" + this.requesterID + ".json";
-        this.ajax('updateZendeskData', UserAPIURL, dataObject)
-          .done(function(data) {
-
-            //If in debug mode, write to console
-            this.consoleDebug("object", 'ZD User Update (Impersonation Email):', data);
-          });
-        return true;
-      } else {
-        return true;
+        }
+        // If one of the fields does not exist, save ticket regardless
+        catch (err) {
+          return true;
+        }
+      // Prevent ticket from being put on hold unless a reminder has been set in the Remind Me One Day Before field
+      // unless the ticket form is Billing & Account questions
+      } else if (status === "hold") {
+        try {
+          var reminder = ticket.customField("custom_field_26075538");
+          var today = new Date();
+          console.log(reminder < today);
+          if (reminder === null && form != 32724) {
+            return "The ticket was not updated. Please set a reminder in the 'Remind me one day before:' field before placing the ticket on hold.";
+          } else if (reminder < today && form != 32724) {
+            return "The ticket was not updated. When placing a ticket on hold, the date in the 'Remind me one day before:' field must be a date in the future.";
+          }
+        } catch (err) {
+          return true;
+        }
       }
     },
 
