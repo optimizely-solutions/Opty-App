@@ -12,6 +12,9 @@
 <tr><td class="title">Subscription MRR: </td><td>{{subscriptionMrr}}</td></tr>
 <tr><td class="title">Billing Start Date: </td><td>{{renewal}}</td></tr>
 <tr><td class="title">Partner: </td><td>{{solutionsPartner}}</td></tr>
+<tr><td class="title">Details: </td><td>{{orgDetails}}</td></tr>
+
+
     
 </table>
 
@@ -24,15 +27,12 @@
 <tr><td class="title"># Tickets submitted this month: </td><td>{{recentTickets}}</td></tr>
 <tr><td class="title">Phone: </td><td>{{phone}}</td>
 <tr><td class="title">Time Zone: </td><td>{{timeZone}}</td>
+<tr><td class="title">Details: </td><td>{{userDetails}}</td></tr>
+
     
 </table>
-
-<table id="add_notes">
-    <tr><td class="title">Notes: </td></tr>
-    <tr><td><textarea id="acc_notes_input">{{accountNotes}}</textarea></td></tr>
-</table>
-
 </div>
+
 
 <div id="sfdcLinks">
 
@@ -44,17 +44,40 @@
 </div>
 
 
-<!--Account Notes
+<!--Coming soon
 
 <form name="addNote">
     <input type="text" name="notes" class="notes-input" placeholder="Anything else?">
-    <input type="text" value="Add" class="btn btn-inverse btn-add">
+    <input type="submit" value="Add" class="btn btn-inverse btn-add">
 </form>
 
-<div class="acc_notes">
-    <h6>Account Notes</h6>
-    <div></div>
-    <textarea id="acc_notes_input"></textarea>
-  </div>
-
 -->
+
+
+
+<!--
+<ul id="subscription_notes">
+
+<li>Name: {{accountName}}</li>
+<li>Account Manager: {{csm}}</li>
+<li>Account MRR: {{accountMrr}}</li>
+<li>Subscription MRR: {{subscriptionMrr}}</li>
+<li>Billing Start Date: {{renewal}}</li>
+<li>Partner: {{solutionsPartner}}</li>
+<li>Details: {{orgDetails}}</li>
+
+    
+</ul>
+
+<ul id="contact_notes" class="hide">
+
+<li>Name: {{contactName}}</li>
+<li>Subscription: {{accountName}}</li>
+<li>Platform Certified? {{platformCertified}}</li>
+<li>Developer Certified? {{developerCertified}}</li>
+<li># Tickets submitted this month: {{recentTickets}}</li>
+<li>Phone: {{phone}}</li>
+<li>Time Zone: {{timeZone}}</li>
+
+    
+</ul>-->
