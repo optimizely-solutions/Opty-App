@@ -21,29 +21,28 @@
 <!-- Post to Chatter Button -->
   <a id='chatter_button' class='btn btn-large btn-inverse btn-blue' data-toggle="modal" data-target=".modal_sfdc" ><i class="icon-envelope" id='chatter_env'></i>Notify Sales Via Chatter</a>
 
-<!-- Collaborators Button -->
-  <a id='collaborators_button' class='btn btn-large btn-inverse btn-blue'><i class="icon-user"></i>Tag Collaborator</a>
-  <div id="collaborators">
-    <div>
-      <ul>
-        <li>Amy</li>
-        <li>Brian</li>
-        <li>Bryce</li>
-        <li>Danny</li>
-        <li>David O</li>
-        <li>Derek</li>
-        <li>Lyndsey</li>
-        <li>Ted</li>
-      </ul>
-    </div>
-      <ul>
-        <li>Allie</li>
-        <li>David S</li>
-        <li>Mario</li>
-        <li>Nils</li>
-      </ul>
-    <div>
-    </div>
+<!-- Add Collaborator Button -->
+  <a id='collaborator_button' class='btn btn-large btn-inverse btn-blue'><i class="icon-user"></i>Add Collaborator</a>
+  <div id='collaborators' class='hide'>
+  <div style="width:50%;display:inline-block;text-align:center;padding-bottom:10px">SAN FRANCISCO</div>
+  <div style="width:50%;display:inline-block;float:right;text-align:center;padding-bottom:10px">AMSTERDAM</div>
+    <li style="width:50%;display:inline-block;text-align:center">
+      <ul style="display:block" class="btn">Amara</ul>
+      <ul style="display:block" class="btn">Amy</ul>
+      <ul style="display:block" class="btn">Brian</ul>
+      <ul style="display:block" class="btn">Bryce</ul>
+      <ul style="display:block" class="btn">Danny</ul>
+      <ul style="display:block" class="btn">David O</ul>
+      <ul style="display:block" class="btn">Devin</ul>
+      <ul style="display:block" class="btn">Lyndsey</ul>
+      <ul style="display:block" class="btn">Ted</ul>
+    </li>
+    <li style="width:50%;display:inline-block;float:right;text-align:center">
+      <ul style="display:block" class="btn">Allie</ul>
+      <ul style="display:block" class="btn">David S</ul>
+      <ul style="display:block" class="btn">Mario</ul>
+      <ul style="display:block" class="btn">Nils</ul>
+    </li>
   </div>
   
 <!-- Form Options  -->
