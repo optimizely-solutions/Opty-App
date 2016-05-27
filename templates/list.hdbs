@@ -20,9 +20,31 @@
 
 <!-- Post to Chatter Button -->
   <a id='chatter_button' class='btn btn-large btn-inverse btn-blue' data-toggle="modal" data-target=".modal_sfdc" ><i class="icon-envelope" id='chatter_env'></i>Notify Sales Via Chatter</a>
-  
-<!-- Change From Button [DEPRECATED]-->
-<!--  <span id="open-close" class="fromAddressLinkHeader btn btn-inverse btn-blue"><i class="icon-plus"></i>Change From Address</span>-->
+
+<!-- Collaborators Button -->
+  <a id='collaborators_button' class='btn btn-large btn-inverse btn-blue'><i class="icon-user"></i>Tag Collaborator</a>
+  <div id="collaborators">
+    <div>
+      <ul>
+        <li>Amy</li>
+        <li>Brian</li>
+        <li>Bryce</li>
+        <li>Danny</li>
+        <li>David O</li>
+        <li>Derek</li>
+        <li>Lyndsey</li>
+        <li>Ted</li>
+      </ul>
+    </div>
+      <ul>
+        <li>Allie</li>
+        <li>David S</li>
+        <li>Mario</li>
+        <li>Nils</li>
+      </ul>
+    <div>
+    </div>
+  </div>
   
 <!-- Form Options  -->
 <!--
