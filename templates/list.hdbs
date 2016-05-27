@@ -27,7 +27,6 @@
   <div style="width:50%;display:inline-block;text-align:center;padding-bottom:10px">SAN FRANCISCO</div>
   <div style="width:50%;display:inline-block;float:right;text-align:center;padding-bottom:10px">AMSTERDAM</div>
     <li style="width:50%;display:inline-block;text-align:center">
-      <ul style="display:block" class="btn">Amara</ul>
       <ul style="display:block" class="btn">Amy</ul>
       <ul style="display:block" class="btn">Brian</ul>
       <ul style="display:block" class="btn">Bryce</ul>
