@@ -317,7 +317,7 @@
       //Sets the user email used for the impersonate button, and updates the ticket impersonate field 
       if (imp_email.trim() === "" || imp_email === "null") {
         //Look at User Impersonation field. If not blank, then set as override Email. If Blank, check Org Impersonation field
-        imp_email = data.user.user_fields.impersonation_email || '';
+        imp_email = this.data.user.user_fields.impersonation_email || '';
 
         //If imp_email is not empty, then update the userEmail and set the customField. Else get check the org to see if the custom field is set there
 
