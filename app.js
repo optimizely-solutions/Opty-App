@@ -189,7 +189,10 @@
       'click a.validation': 'validateExperimentId',
       'click a.notes_link': 'toggleAccountNotes',
       'click #collaborator_button': 'openCollaborator',
-      'click #collaborators li ul': 'addCollaborator',
+      'click #collaborators li': 'addCollaborator',
+      //'click #add_notes': 'this.updateAccNotes',
+      //'blur #acc_notes_input': 'this.saveAccNotes',
+      //'click #collaborators li ul': 'addCollaborator',
 
 
       //General Event Calls End Here -------------------------------------------------------------------------------------->
@@ -397,18 +400,19 @@
     },
 
 
-    toggleAccountLinks: function() {
-
+   toggleAccountLinks: function() {
       return this.$('section[data-links]').slideToggle();
     },
 
     toggleKBLinks: function() {
-
-      return this.$('#articleWrapper').slideToggle();
+        return this.$('#articleWrapper').slideToggle();
     },
 
+    openCollaborator: function(){
+        return this.$('#collaborators').slideToggle();
+    },
+      
     toggleNotes: function() {
-
       return this.$('#notesWrapper').slideToggle();
     },
 
@@ -428,13 +432,6 @@
       }
     },
 
-    openCollaborator: function() {
-      if (this.$("#collaborators").hasClass("hide")) {
-        this.$("#collaborators").removeClass("hide");
-      } else {
-        this.$("#collaborators").addClass("hide");
-      }
-    },
 
     addCollaborator: function(element) {
 
@@ -444,6 +441,7 @@
       var TSE_NAME = "collaborator_" + element.toElement.innerHTML.toLowerCase().split(" ").join("_");
       tags.add(TSE_NAME);
     },
+
 
     updateImpersonate: function() {
       //function to update the impersonate email when the user changes it
@@ -727,7 +725,7 @@
       //Use the Zendesk API to get the User data
       //example URL: https://optimizely.zendesk.com/api/v2/users/1070462067.json      
       //Pass data to local variables
-      this.contactName = user.customField("user.name");
+      this.contactName = user.name();
       this.timeZone = user.customField("time_zone");
       this.phone = user.customField("user_phone_number");
       this.developerCertified = user.customField("developer_certified_user");
@@ -735,7 +733,7 @@
       this.recentTickets = user.customField("tickets_closed_this_month");
       this.userDetails = user.details();
       this.zendesk_salesforce_contact_id = user.customField("zendesk_salesforce_contact_id");
-
+      this.org = org.customField("id");
       //End get contact information
 
 
