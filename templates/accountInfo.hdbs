@@ -12,11 +12,6 @@
 <tr><td class="title">Subscription MRR: </td><td>{{subscriptionMrr}}</td></tr>
 <tr><td class="title">Billing Start Date: </td><td>{{renewal}}</td></tr>
 <tr><td class="title">Partner: </td><td>{{solutionsPartner}}</td></tr>
-<<<<<<< HEAD
-
-=======
-<tr><td class="title">Details: </td><td>{{orgDetails}}</td></tr>
->>>>>>> 78612d102f8f4d440305ac66f777fa821a058b2c
 
 
     
@@ -31,7 +26,7 @@
 <tr><td class="title"># Tickets submitted this month: </td><td>{{recentTickets}}</td></tr>
 <tr><td class="title">Phone: </td><td>{{phone}}</td>
 <tr><td class="title">Time Zone: </td><td>{{timeZone}}</td>
-<<<<<<< HEAD
+
 
 
     
@@ -41,12 +36,7 @@
     <tr><td><textarea id="acc_notes_input">{{accountNotes}}</textarea></td></tr>
 </table>
     
-=======
-<tr><td class="title">Details: </td><td>{{userDetails}}</td></tr>
 
-    
-</table>
->>>>>>> 78612d102f8f4d440305ac66f777fa821a058b2c
 </div>
 
 
