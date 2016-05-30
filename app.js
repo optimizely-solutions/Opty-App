@@ -106,17 +106,20 @@
         };
       },
 
+
       postChatter_single: function() {
 
         return {
 
           url: this.SFDCinstance + "/services/data/v23.0/chatter/feeds/record/" + this.ChatterRecordId + "/feed-items",
+
           headers: {
             'Authorization': 'OAuth ' + this.store('SecurityToken')
           },
           contentType: 'application/json',
           type: 'POST',
           data: JSON.stringify({
+
             "body": {
               messageSegments: [{
                 type: "mention",
@@ -126,6 +129,7 @@
                 "text": this.ChatterMessage + ' Notification By ' + this.currentUser().name()
               }]
             }
+
 
           })
         };
@@ -160,10 +164,12 @@
 
 
 
+
       //SFDC Opty App Requests End Here ------------------------------------------------------------------>
 
 
     },
+
 
     events: {
 
@@ -193,20 +199,20 @@
       'click a.validation': 'validateExperimentId',
       'click a.notes_link': 'toggleAccountNotes',
       'click #collaborator_button': 'openCollaborator',
-      'click #collaborators li': 'addCollaborator',
-      //'click #add_notes': 'this.updateAccNotes',
-      //'blur #acc_notes_input': 'this.saveAccNotes',
-      //'click #collaborators li ul': 'addCollaborator',
-
+      'click #collaborators li ul': 'addCollaborator',
 
 
       //General Event Calls End Here -------------------------------------------------------------------------------------->
+
 
 
       //SFDC Event Calls  Start Here -------------------------------------------------------------------------------------->
       'fetchAccessToken.error': function(data) {
         this.consoleDebug("object", data);
 
+      //SFDC Event Calls  Start Here -------------------------------------------------------------------------------------->
+      'fetchAccessToken.error': function(data) {
+        this.consoleDebug("object", data);
 
 
       },
@@ -244,6 +250,7 @@
             this.consoleDebug("normal", 'OptimizelySFDC - Success - Returning to check Contact after getting Token');
             this.search2CheckContact();
           }
+
 
         }
 
@@ -425,23 +432,21 @@
     },
 
 
+
     toggleAccountLinks: function() {
+
+
       return this.$('section[data-links]').slideToggle();
     },
 
     toggleKBLinks: function() {
-        return this.$('#articleWrapper').slideToggle();
-    },
-    
-//    toggleNotes: function(){
-//          return this.$('#notesWrapper').slideToggle();
-//    },
 
-    openCollaborator: function(){
-        return this.$('#collaborators').slideToggle();
+
+      return this.$('#articleWrapper').slideToggle();
     },
-      
+
     toggleNotes: function() {
+
       return this.$('#notesWrapper').slideToggle();
     },
 
@@ -461,13 +466,13 @@
       }
     },
 
-//    openCollaborator: function() {
-//      if (this.$("#collaborators").hasClass("hide")) {
-//        this.$("#collaborators").removeClass("hide");
-//      } else {
-//        this.$("#collaborators").addClass("hide");
-//      }
-//    },
+    openCollaborator: function() {
+      if (this.$("#collaborators").hasClass("hide")) {
+        this.$("#collaborators").removeClass("hide");
+      } else {
+        this.$("#collaborators").addClass("hide");
+      }
+    },
 
     addCollaborator: function(element) {
 
@@ -490,6 +495,7 @@
       this.$('#impersonate').attr("href", "https://www.optimizely.com/admin/impersonate?email=" + imp_email + "&redirect=https://www.optimizely.com/dashboard");
 
     },
+
     changeRecipientMobile: function() {
       //Function to change the change via to Mobile Support 
 
@@ -689,6 +695,7 @@
         }
       }
 
+
     },
 
 
@@ -745,7 +752,6 @@
       this.solutionsPartner = org.customField("partner_name");
       this.accountMrr = org.customField("account_mrr");
       this.orgDetails = org.customField("details");
-      this.org=org.customField("id");
       //based on the 'High-Risk Account' checkbox at the org level
       //data.organizations[0].churn_risk === true ? this.churnRisk='yes' : this.churnRisk='no';
       if (org.churn_risk === true) {
@@ -756,12 +762,14 @@
       //this.churnRisk=data.organizations[0].churn_risk;
       this.subscription_id = org.customField("subscription_id");
 
+
       //End get org information
 
       //Use the Zendesk API to get the User data
       //example URL: https://optimizely.zendesk.com/api/v2/users/1070462067.json      
       //Pass data to local variables
-      this.contactName = user.name();
+
+      this.contactName = user.customField("user.name");
       this.timeZone = user.customField("time_zone");
       this.phone = user.customField("user_phone_number");
       this.developerCertified = user.customField("developer_certified_user");
@@ -949,11 +957,25 @@
           for (var i = 0; i < data.totalSize; i++) {
             this.$(country).append("<option value='" + data.records[i].Id + "'>" + data.records[i].Name + "</option>");
           }
-          //End of getTokenFunction
-      });
+
+
+        })
+        .fail(function(data) {
+          this.consoleDebug("object", "SDR User Request Failed", data);
+          if (data.statusText.trim() === "Unauthorized") {
+            this.consoleDebug("normal", 'OptimizelySFDC - Info - Initial attempt to get SFDC User object failed because of invalid session at Account Check. Going to get a new one!');
+
+            //Go get a new Token since it's expired 
+            this.forceToken = true;
+            this.goToFunction = "getSDR";
+            this.getToken();
+          }
+        });
+
     },
-              
-      
+
+
+
     search1CheckAccount: function() {
 
       //Function that looks up the Account in SFDC. 
@@ -1042,7 +1064,10 @@
               this.search3CheckLead();
             }
             //End check on Data=Done 
+
           }
+        })
+
 
 
           //If we recieved done object but it's not true, assume there is another error
@@ -1053,7 +1078,7 @@
             //Proceed to check via Contact since we got unexpected error
             this.search2CheckContact();
           }
-        })
+        }
 
       .fail(function(data) {
         //Function to handle a failed request to SFDC
@@ -1166,9 +1191,11 @@
                   }
 
 
+
                 }
                 //End check for Subscriber
               }
+
 
               //If not a subscribed account, then look for the account as a lead
               else {
@@ -1196,9 +1223,11 @@
             }
 
 
+
             //End Data Done check
           } else {
             //Last check, we didn't get an error message that we expected or Done Object. Stop Execution and display error to user
+
 
             this.consoleDebug("normal", 'OptimizelySFDC - Error - Contact check stopped because we recieved an error or object from SFDC that we did not expect (Done not received)!');
 
@@ -1209,6 +1238,7 @@
 
           //End Analysis of Contact SFDC Object Returned
 
+
         })
         .fail(function(data) {
           //Function to handle a failed request to SFDC
@@ -1216,6 +1246,7 @@
 
           this.consoleDebug("object", "OptySFDC - CheckContactFailed Object:", data);
           if (data.statusText.trim() === "Unauthorized") {
+
 
             //Debug Mode - Log to Console 
             this.consoleDebug("normal", 'OptimizelySFDC - Info - Initial attempt to get SFDC object failed because of invalid session at Contact Check. Going to get a new one!');
@@ -1272,6 +1303,7 @@
           //Check to see if Data is Done and that TotalSize of Object is not 0
           if ((data.done) && (data.totalSize !== 0)) {
 
+
             ///Lead Successfully found.  Store info and resent Confirmation Screen
             this.ChatterRecordId = data.records[0].Id;
             this.ChatterOwnerId = data.records[0].SDR_Owner__c;
@@ -1288,7 +1320,9 @@
             this.consoleDebug("normal", 'OptimizelySFDC - Data - Lead Objects Data Elements - ' + this.ChatterRecordId + ' ' + this.ChatterOwnerId);
 
 
+
             if (this.LeadStatus === "Sales Qualified Lead") {
+
 
 
               //Debug Mode - Log to Console
@@ -1332,6 +1366,7 @@
       this.LeadFN = this.$('input[name="leadfn"]').val();
       this.LeadLN = this.$('input[name="leadln"]').val();
       this.LeadCompany = this.$('input[name="leadcompany"]').val();
+
 
 
 
@@ -1410,8 +1445,10 @@
               this.renderMessage("Error", "Lead not created due to error in leading creation process.");
             }
 
+
           });
       }
+
 
 
     },
@@ -1419,6 +1456,11 @@
     ChatterConfirmation: function() {
 
       //Function used by the system to post to Chatter. This is called when the Agent confirms the Chatter Message
+
+
+      //Get the Chatter Message from the box in case it was changed
+      var RecordName = "";
+      this.ChatterMessage = this.$('textarea[name="chattermessage"]').val();
 
 
       //Get the Chatter Message from the box in case it was changed
@@ -1489,6 +1531,7 @@
         this.consoleDebug("normal", 'OptimizelySFDC - Info - Chatter Message  for ' + this.ChatterOwnerName + ': ' + this.ChatterMessage);
 
 
+
         //Add information to the ticket
         var ticket = this.ticket();
         var currentDate = new Date();
@@ -1509,6 +1552,7 @@
             //If in debug mode, write to console
             this.consoleDebug("object", 'ZD Ticket Update (Comment Update - New Lead):', data);
 
+
             //After successful update, update APP screen
             services.notify("Ticket Updated By Opty App - Internal Note for Lead Creation");
           })
@@ -1522,6 +1566,10 @@
         //Render the 1st screen again and show the message
         this.renderMessage("Success", "Chatter Message Successfully posted!");
       } else {
+
+
+        //Render the 1st screen again and show the message
+        this.renderMessage("Error", "Chatter Message not posted due to error");
 
 
         //Debug Mode - Log to Console
@@ -1542,9 +1590,8 @@
       //Render the 1st screen again and show the message
       this.renderMessage("Error", "Chatter Message not posted due to error");
 
+
     },
-      
-      
     switchLeadCountry: function() {
       //function to switch the SDR Country from EU to US or US to EU. This changes the lead and updates the drop down
 
@@ -1559,7 +1606,11 @@
         this.SDRLeadName = this.USLeadName;
         this.$('#switchlead').text("Switch to EU Lead");
       }
+
+
       this.$('#SDRLead').text(this.SDRLeadName);
+
+
     },
 
     cancelChange: function() {
@@ -1581,6 +1632,7 @@
       this.$('#cancelSDR').removeClass("show");
       this.$('#cancelSDR').addClass("hide");
       this.$('#changeSDR').text("Change Record Owner");
+
 
 
     },
@@ -1622,6 +1674,7 @@
         this.$('#cancelSDR').removeClass("show");
         this.$('#cancelSDR').addClass("hide");
         this.$('#changeSDR').text("Change Record Owner");
+
 
       }
 
@@ -1681,6 +1734,15 @@
       this.$('#leadcontinue').addClass('hidden');
 
 
+      //Show loading screen
+      this.$(this.sfdcmodal).removeClass("show");
+      this.$(this.sfdcmodal).addClass("hide");
+      this.$("#loading").addClass("show");
+      this.$("#loading").removeClass("hide");
+      this.$("#loadingheader").text("Waiting five minutes for lead data enrichment process to end. The Chatter confirmation screen will show once complete.");
+      this.sfdcmodal = "#loading";
+
+
       //Hide load and show confirmation screen
       this.$("#loading").addClass("hide");
       this.$("#loading").removeClass("show");
@@ -1688,8 +1750,9 @@
       this.$("#confirmation").removeClass("hide");
       this.sfdcmodal = "#confirmation";
 
+
+
     },
-      
 
     renderMessage: function(type, message) {
       //Function to render message on the SFDC Modal
@@ -1740,6 +1803,7 @@
       this.sfdcmodal = "#newlead";
 
 
+
     },
 
     renderLeadDone: function() {
@@ -1754,6 +1818,12 @@
       this.$('#leadcontinue').addClass('show');
       this.$('#closetext').text('Close');
 
+
+      var leadLink = this.SFDCinstance + "/" + this.newLeadId;
+      this.$('#leadlink').text(leadLink);
+      this.$('#leadlink').attr("href", leadLink);
+
+
       var leadLink = this.SFDCinstance + "/" + this.newLeadId;
       this.$('#leadlink').text(leadLink);
       this.$('#leadlink').attr("href", leadLink);
@@ -1767,7 +1837,17 @@
       this.sfdcmodal = "#leadconf";
 
 
+      //Hide current screen and show message
+      this.$(this.sfdcmodal).removeClass("show");
+      this.$(this.sfdcmodal).addClass("hide");
+      this.$("#leadconf").addClass("show");
+      this.$("#leadconf").removeClass("hide");
+      this.sfdcmodal = "#leadconf";
+
+
     },
+
+
 
     modalButtonReset: function() {
 
@@ -1781,6 +1861,7 @@
       this.$('#switchlead').removeClass("shown");
       this.$('#switchlead').addClass("hidden");
       this.$('#closetext').text('Cancel');
+
 
 
 

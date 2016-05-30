@@ -51,7 +51,10 @@
   <a id='chatter_button' class='btn btn-large btn-inverse btn-blue' data-toggle="modal" data-target=".modal_sfdc" ><i class="icon-envelope" id='chatter_env'></i>Notify Sales Via Chatter</a>
 
 <!-- Add Collaborator Button -->
+<<<<<<< HEAD
 <!--
+=======
+>>>>>>> 78612d102f8f4d440305ac66f777fa821a058b2c
   <a id='collaborator_button' class='btn btn-large btn-inverse btn-blue'><i class="icon-user"></i>Add Collaborator</a>
   <div id='collaborators' class='hide'>
   <div style="width:50%;display:inline-block;text-align:center;padding-bottom:10px">SAN FRANCISCO</div>
@@ -73,7 +76,10 @@
       <ul style="display:block" class="btn">Nils</ul>
     </li>
   </div>
+<<<<<<< HEAD
 -->
+=======
+>>>>>>> 78612d102f8f4d440305ac66f777fa821a058b2c
   
 <!-- Form Options  -->
 <!--
