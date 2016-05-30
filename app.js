@@ -723,6 +723,7 @@ events: {
                       this.solutionsPartner=org.customField("partner_name");
                       this.accountMrr=org.customField("account_mrr");
                       this.accountNotes=org.customField("zendesk_account_notes");
+                      this.org=org.customField("id");
                  //based on the 'High-Risk Account' checkbox at the org level
                       //data.organizations[0].churn_risk === true ? this.churnRisk='yes' : this.churnRisk='no';
                     if (org.churn_risk === true){
