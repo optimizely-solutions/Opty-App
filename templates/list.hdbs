@@ -28,9 +28,12 @@
           <li class="btn-white-small btn">Amy</li>
           <li class="btn-white-small btn">Brian</li>
           <li class="btn-white-small btn">Bryce</li>
+          <li class="btn-white-small btn">Cy</li>
           <li class="btn-white-small btn">Danny</li>
           <li class="btn-white-small btn">David O</li>
+          <li class="btn-white-small btn">Derek</li>
           <li class="btn-white-small btn">Devin</li>
+          <li class="btn-white-small btn">Holger</li>
           <li class="btn-white-small btn">Lyndsey</li>
           <li class="btn-white-small btn">Ted</li>
       </ul>
@@ -42,6 +45,7 @@
           <li class="btn-white-small btn">David S</li>
           <li class="btn-white-small btn">Mario</li>
           <li class="btn-white-small btn">Nils</li>
+          <li class="btn-white-small btn">Tibo</li>
       </ul>
     </div>
   </div>
