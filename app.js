@@ -13,15 +13,11 @@
     usEDRRoleID: "00EC000000133fBMAQ",
     euAERoleID: "00EC0000001349eMAA",
 
-
-
     //General Local Variables End Here -------------------------------------------------------------------->
 
     //SFDC Opty App Components Local Variables Start Here ------------------------------------------------------------------>
 
     //SFDC Opty App Components Local Variables End Here ------------------------------------------------------------------>
-
-
 
     requests: {
 
@@ -106,20 +102,17 @@
         };
       },
 
-
       postChatter_single: function() {
 
         return {
 
           url: this.SFDCinstance + "/services/data/v23.0/chatter/feeds/record/" + this.ChatterRecordId + "/feed-items",
-
           headers: {
             'Authorization': 'OAuth ' + this.store('SecurityToken')
           },
           contentType: 'application/json',
           type: 'POST',
           data: JSON.stringify({
-
             "body": {
               messageSegments: [{
                 type: "mention",
@@ -130,7 +123,6 @@
               }]
             }
 
-
           })
         };
       },
@@ -139,7 +131,7 @@
 
         return {
 
-          url: this.SFDCinstance + "/services/data/v20.0/sobjects/Lead/",
+          url: "https://na28.salesforce.com/services/data/v20.0/sobjects/Lead/",
           headers: {
             'Authorization': 'OAuth ' + this.store('SecurityToken')
           },
@@ -164,12 +156,10 @@
 
 
 
-
       //SFDC Opty App Requests End Here ------------------------------------------------------------------>
 
 
     },
-
 
     events: {
 
@@ -205,14 +195,10 @@
       //General Event Calls End Here -------------------------------------------------------------------------------------->
 
 
-
       //SFDC Event Calls  Start Here -------------------------------------------------------------------------------------->
       'fetchAccessToken.error': function(data) {
         this.consoleDebug("object", data);
 
-      //SFDC Event Calls  Start Here -------------------------------------------------------------------------------------->
-      'fetchAccessToken.error': function(data) {
-        this.consoleDebug("object", data);
 
 
       },
@@ -250,7 +236,6 @@
             this.consoleDebug("normal", 'OptimizelySFDC - Success - Returning to check Contact after getting Token');
             this.search2CheckContact();
           }
-
 
         }
 
@@ -316,31 +301,11 @@
       var experimentId = currentTicket.customField('custom_field_22559284') || '';
       this.exp = experimentId;
       this.impersonation_link = "https://www.optimizely.com/admin/impersonate?experiment_id=" + this.exp + "&redirect=https://www.optimizely.com/edit?experiment_id=" + this.exp;
+      this.userEmail = imp_email.trim();
 
       //function to check if the ticket was sent to internal-support@ and change the Sent Via field to support@ if necessary
       this.checkIfInternal();
-
-      //      //Get recipient email address to show on the home screen
-      //      var UserAPIURL = "/api/v2/tickets/"+this.ticket().id()+".json";
-
-
-      //If the impersonation email is blank, then check the impersonation email at the user level. If that is empty, check it at the org level
-      //Sets the user email used for the impersonate button, and updates the ticket impersonate field 
-      if (imp_email.trim() === "" || imp_email === "null") {
-        //Look at User Impersonation field. If not blank, then set as override Email. If Blank, check Org Impersonation field
-        imp_email = this.data.user.user_fields.impersonation_email || '';
-
-        //If imp_email is not empty, then update the userEmail and set the customField. Else get check the org to see if the custom field is set there
-
-        if (imp_email.trim === '' || imp_email === null) {
-          this.userEmail = imp_email.trim();
-          currentTicket.customField('custom_field_21047815', imp_email);
-        }
-      } else {
-        //If it wasn't null or empty, then set the impersonation field as the userEmail
-        this.userEmail = imp_email.trim();
-        this.AppInitialized();
-      }
+      this.AppInitialized();
     },
 
     AppInitialized: function() {
@@ -432,15 +397,12 @@
     },
 
 
-
     toggleAccountLinks: function() {
-
 
       return this.$('section[data-links]').slideToggle();
     },
 
     toggleKBLinks: function() {
-
 
       return this.$('#articleWrapper').slideToggle();
     },
@@ -495,7 +457,6 @@
       this.$('#impersonate').attr("href", "https://www.optimizely.com/admin/impersonate?email=" + imp_email + "&redirect=https://www.optimizely.com/dashboard");
 
     },
-
     changeRecipientMobile: function() {
       //Function to change the change via to Mobile Support 
 
@@ -695,7 +656,6 @@
         }
       }
 
-
     },
 
 
@@ -711,7 +671,7 @@
       this.sfdcmodal = "#loading";
 
       //Build the URL for the SFDC API Call
-      var URLBase = this.SFDCinstance + "/services/data/v23.0/";
+      var URLBase = "https://na28.salesforce.com/services/data/v23.0/";
       this.APIBase = URLBase;
 
       //Check to see if we already have an AccessToken in the LocalStorage. If it's empty, get a new one
@@ -762,13 +722,11 @@
       //this.churnRisk=data.organizations[0].churn_risk;
       this.subscription_id = org.customField("subscription_id");
 
-
       //End get org information
 
       //Use the Zendesk API to get the User data
       //example URL: https://optimizely.zendesk.com/api/v2/users/1070462067.json      
       //Pass data to local variables
-
       this.contactName = user.customField("user.name");
       this.timeZone = user.customField("time_zone");
       this.phone = user.customField("user_phone_number");
@@ -847,6 +805,8 @@
 
     sfdcGetInfo: function() {
 
+      console.log("calling sfdcGetInfo");
+
       //Function that is called when the user hits the "Post to Chatter"
       //Function will get the ticket information, and look up the Organization information using the Zendesk API. 
       //When an org is found, the app goes to the search for Account Function. If it isn't, it goes to the search for Contact function
@@ -864,7 +824,7 @@
       this.$("#leadconf").removeClass("show");
 
       //Show loading screen
-      //this.$(this.sfdcmodal).removeClass("show"); this.$(this.sfdcmodal).addClass("hide");
+      this.$(".modal_sfdc").removeClass("hide"); this.$(".modal_sfdc").addClass("show");
       this.$("#loadingheader").text("The system is looking up the requester in Salesforce via a Account, Contact, or Lead");
       this.$("#loading").addClass("show");
       this.$("#loading").removeClass("hide");
@@ -958,7 +918,6 @@
             this.$(country).append("<option value='" + data.records[i].Id + "'>" + data.records[i].Name + "</option>");
           }
 
-
         })
         .fail(function(data) {
           this.consoleDebug("object", "SDR User Request Failed", data);
@@ -986,9 +945,12 @@
       this.consoleDebug("normal", 'OptimizelySFDC - Info - In search Account function ');
 
       //Set SFDC API URL for Account Search
-      var AccountName = this.OrgName.replace("!", "%21").replace("#", "%23").replace("$", "%24").replace("%", "%25").replace("&", "%26").replace("'", "%27").replace("(", "%28").replace(")", "%29").replace("*", "%2A").replace("+", "%2B").replace("-", "%2D").replace("/", "%2F").replace("~", "%7E");
+      var numberPattern = /([0-9]+)/g;
+      var AccountName = this.OrgName.match(numberPattern);
       var URLBase = this.APIBase + "query/?q=";
-      var action = "SELECT+Id,Owner.Name,OwnerId,Account_Plan_Derived__c,recurly__Subscriber__c+FROM+Account+WHERE+Name='" + AccountName + "'";
+
+      // Search for SFDC subscription records for a record which matches the snippet ID (account code)
+      var action = "SELECT+Id,Plan_Name__c,Subscriber__c,Status_zSub__c,Account__r.Account_ID_18_Char__c,Account__r.Team_Member_1__c,Account__r.Team_Member_1_First_Name__c,Account__r.Team_Member_1_Last_Name__c,Account__r.Team_Member_2__c,Account__r.Team_Member_2_First_Name__c+FROM+Subscription__c+WHERE+Account_Code__c='" + AccountName + "'";
 
       //Debug Mode & Debug Object Mode - Log to Console
       this.consoleDebug("object", 'OptimizelySFDC - API Call -', URLBase + action);
@@ -1011,28 +973,33 @@
               this.consoleDebug("normal", 'OptimizelySFDC - Info- Search Account -  SFDC Data Returned - Found that Data object has Account ID!');
 
               //Get the Plan Type and Subscriber from the data rerturned. 
-              var PlanType = data.records[0].Account_Plan_Derived__c;
-              var Subscriber = data.records[0].recurly__Subscriber__c;
+              var PlanType = data.records[0].Plan_Name__c;
+              var Subscriber = data.records[0].Subscriber__c;
+              var Status = data.records[0].Status_zSub__c;
+              console.log(PlanType,Subscriber,Status);
 
               //Data check, make sure the account is subscribed. If they aren't send it to the Lead check
-              if (Subscriber) {
+              if (true) {
 
                 //Debug Mode - Log to Console
                 this.consoleDebug("normal", 'OptimizelySFDC - Info- Search Account -  SFDC Data Returned - Account was found that was active. ');
 
                 //Data check, make sure the account is Gold, Platinum, Agency 
-                if (PlanType === "platinum" || PlanType === "gold" || PlanType === "agency") {
+                if (PlanType.indexOf("latinum") > -1 || PlanType.indexOf("old") > -1 || PlanType.indexOf("gency") > -1 || PlanType.indexOf("nterprise") > -1) {
 
                   //Debug Mode - Log to Console
                   this.consoleDebug("normal", 'OptimizelySFDC - Info- Search Account -  SFDC Data Returned - Account found was Gold, Platinum, or Agency. Chatter request should go to AE');
 
-                  //Account is subscribed, and plan is Platinum, Agency, Gold so store data into Chatter variables 
-                  this.ChatterRecordId = data.records[0].Id;
-                  this.ChatterOwnerId = data.records[0].OwnerId;
-                  this.ChatterOwnerName = data.records[0].Owner.Name;
+                  //Account is subscribed, and plan is Platinum, Agency, Gold so store data into Chatter variables
+                  this.ChatterRecordId = data.records[0].Account__r.Account_ID_18_Char__c;
+                  this.ChatterOwnerId = data.records[0].Account__r.Team_Member_1__c;
+                  this.ChatterOwnerName = data.records[0].Account__r.Team_Member_1_First_Name__c + " " + data.records[0].Account__r.Team_Member_1_Last_Name__c;
+                  this.ChatterCSMId = data.records[0].Account__r.Team_Member_2__c;
+                  this.ChatterCSMName = data.records[0].Account__r.Team_Member_2_First_Name__c;
+
 
                   //Change the screen to show the Chatter message post before going forward
-                  this.RecordType = "Account";
+                  this.RecordType = "Subscription";
                   this.renderConfirmation1("Step 1 - Account Chatter Notification Options");
                   //End check if plan type
                 } else {
@@ -1064,10 +1031,7 @@
               this.search3CheckLead();
             }
             //End check on Data=Done 
-
           }
-        })
-
 
 
           //If we recieved done object but it's not true, assume there is another error
@@ -1078,7 +1042,7 @@
             //Proceed to check via Contact since we got unexpected error
             this.search2CheckContact();
           }
-        }
+        })
 
       .fail(function(data) {
         //Function to handle a failed request to SFDC
@@ -1122,7 +1086,7 @@
       //Set SFDC API URL for Contact Search
       var URLBase = this.APIBase + "query/?q=";
       var Contact = this.TktEmail.replace("#", "%23").replace("$", "%24").replace("%", "%25").replace("&", "%26").replace("'", "%27").replace("(", "%28").replace(")", "%29").replace("*", "%2A").replace("+", "%2B").replace(",", "%2C").replace("-", "%2D").replace("/", "%2F").replace("~", "%7E");
-      var action = "SELECT+Contact.Account.Id,Contact.Account.Name,Contact.FirstName,Contact.LastName,Contact.Account.OwnerId,Contact.Account.Owner.Name,Contact.Account.Account_Plan_Derived__c,Contact.Account.recurly__Subscriber__c+FROM+Contact+WHERE+email='" + Contact + "'";
+      var action = "SELECT+Contact.Account.Id,Contact.Account.Name,Contact.FirstName,Contact.LastName,Contact.Account.OwnerId+FROM+Contact+WHERE+email='" + Contact + "'";
 
       //Debug Mode & Debug Object Mode - Log to Console
       this.consoleDebug("object", 'Optmiizely SFDC - API Call -  ', URLBase + action);
@@ -1191,11 +1155,9 @@
                   }
 
 
-
                 }
                 //End check for Subscriber
               }
-
 
               //If not a subscribed account, then look for the account as a lead
               else {
@@ -1223,11 +1185,9 @@
             }
 
 
-
             //End Data Done check
           } else {
             //Last check, we didn't get an error message that we expected or Done Object. Stop Execution and display error to user
-
 
             this.consoleDebug("normal", 'OptimizelySFDC - Error - Contact check stopped because we recieved an error or object from SFDC that we did not expect (Done not received)!');
 
@@ -1238,7 +1198,6 @@
 
           //End Analysis of Contact SFDC Object Returned
 
-
         })
         .fail(function(data) {
           //Function to handle a failed request to SFDC
@@ -1246,7 +1205,6 @@
 
           this.consoleDebug("object", "OptySFDC - CheckContactFailed Object:", data);
           if (data.statusText.trim() === "Unauthorized") {
-
 
             //Debug Mode - Log to Console 
             this.consoleDebug("normal", 'OptimizelySFDC - Info - Initial attempt to get SFDC object failed because of invalid session at Contact Check. Going to get a new one!');
@@ -1303,7 +1261,6 @@
           //Check to see if Data is Done and that TotalSize of Object is not 0
           if ((data.done) && (data.totalSize !== 0)) {
 
-
             ///Lead Successfully found.  Store info and resent Confirmation Screen
             this.ChatterRecordId = data.records[0].Id;
             this.ChatterOwnerId = data.records[0].SDR_Owner__c;
@@ -1320,9 +1277,7 @@
             this.consoleDebug("normal", 'OptimizelySFDC - Data - Lead Objects Data Elements - ' + this.ChatterRecordId + ' ' + this.ChatterOwnerId);
 
 
-
             if (this.LeadStatus === "Sales Qualified Lead") {
-
 
 
               //Debug Mode - Log to Console
@@ -1366,7 +1321,6 @@
       this.LeadFN = this.$('input[name="leadfn"]').val();
       this.LeadLN = this.$('input[name="leadln"]').val();
       this.LeadCompany = this.$('input[name="leadcompany"]').val();
-
 
 
 
@@ -1445,10 +1399,8 @@
               this.renderMessage("Error", "Lead not created due to error in leading creation process.");
             }
 
-
           });
       }
-
 
 
     },
@@ -1456,11 +1408,6 @@
     ChatterConfirmation: function() {
 
       //Function used by the system to post to Chatter. This is called when the Agent confirms the Chatter Message
-
-
-      //Get the Chatter Message from the box in case it was changed
-      var RecordName = "";
-      this.ChatterMessage = this.$('textarea[name="chattermessage"]').val();
 
 
       //Get the Chatter Message from the box in case it was changed
@@ -1531,7 +1478,6 @@
         this.consoleDebug("normal", 'OptimizelySFDC - Info - Chatter Message  for ' + this.ChatterOwnerName + ': ' + this.ChatterMessage);
 
 
-
         //Add information to the ticket
         var ticket = this.ticket();
         var currentDate = new Date();
@@ -1552,7 +1498,6 @@
             //If in debug mode, write to console
             this.consoleDebug("object", 'ZD Ticket Update (Comment Update - New Lead):', data);
 
-
             //After successful update, update APP screen
             services.notify("Ticket Updated By Opty App - Internal Note for Lead Creation");
           })
@@ -1566,10 +1511,6 @@
         //Render the 1st screen again and show the message
         this.renderMessage("Success", "Chatter Message Successfully posted!");
       } else {
-
-
-        //Render the 1st screen again and show the message
-        this.renderMessage("Error", "Chatter Message not posted due to error");
 
 
         //Debug Mode - Log to Console
@@ -1634,7 +1575,6 @@
       this.$('#changeSDR').text("Change Record Owner");
 
 
-
     },
 
     changeSDR: function() {
@@ -1675,7 +1615,6 @@
         this.$('#cancelSDR').addClass("hide");
         this.$('#changeSDR').text("Change Record Owner");
 
-
       }
 
     },
@@ -1684,8 +1623,8 @@
       //Wait for 4 minutes before searching for the Lead and rendering the Chatter Confirmation screen for the lead
 
       //Show loading screen
-      this.$(this.sfdcmodal).removeClass("show");
-      this.$(this.sfdcmodal).addClass("hide");
+      //this.$(this.sfdcmodal).removeClass("show");
+      //this.$(this.sfdcmodal).addClass("hide");
       this.$("#loading").addClass("show");
       this.$("#loading").removeClass("hide");
       this.$("#loadingheader").text("Waiting five minutes for lead data enrichment process to end. The Chatter confirmation screen will show once complete.");
@@ -1734,21 +1673,13 @@
       this.$('#leadcontinue').addClass('hidden');
 
 
-      //Show loading screen
-      this.$(this.sfdcmodal).removeClass("show");
-      this.$(this.sfdcmodal).addClass("hide");
-      this.$("#loading").addClass("show");
-      this.$("#loading").removeClass("hide");
-      this.$("#loadingheader").text("Waiting five minutes for lead data enrichment process to end. The Chatter confirmation screen will show once complete.");
-      this.sfdcmodal = "#loading";
-
-
       //Hide load and show confirmation screen
       this.$("#loading").addClass("hide");
       this.$("#loading").removeClass("show");
       this.$("#confirmation").addClass("show");
       this.$("#confirmation").removeClass("hide");
       this.sfdcmodal = "#confirmation";
+      
 
 
 
@@ -1803,7 +1734,6 @@
       this.sfdcmodal = "#newlead";
 
 
-
     },
 
     renderLeadDone: function() {
@@ -1818,36 +1748,22 @@
       this.$('#leadcontinue').addClass('show');
       this.$('#closetext').text('Close');
 
-
-      var leadLink = this.SFDCinstance + "/" + this.newLeadId;
-      this.$('#leadlink').text(leadLink);
-      this.$('#leadlink').attr("href", leadLink);
-
-
       var leadLink = this.SFDCinstance + "/" + this.newLeadId;
       this.$('#leadlink').text(leadLink);
       this.$('#leadlink').attr("href", leadLink);
 
 
       //Hide current screen and show message
-      this.$(this.sfdcmodal).removeClass("show");
-      this.$(this.sfdcmodal).addClass("hide");
+      //this.$(this.sfdcmodal).removeClass("show");
+      //this.$(this.sfdcmodal).addClass("hide");
       this.$("#leadconf").addClass("show");
       this.$("#leadconf").removeClass("hide");
       this.sfdcmodal = "#leadconf";
 
 
-      //Hide current screen and show message
-      this.$(this.sfdcmodal).removeClass("show");
-      this.$(this.sfdcmodal).addClass("hide");
-      this.$("#leadconf").addClass("show");
-      this.$("#leadconf").removeClass("hide");
-      this.sfdcmodal = "#leadconf";
 
 
     },
-
-
 
     modalButtonReset: function() {
 
@@ -1876,6 +1792,7 @@
         this.$('#switchlead').text("Switch to EU Lead");
         this.$('#SDRLead').text(this.SDRLeadName);
       }
+      
 
 
 
