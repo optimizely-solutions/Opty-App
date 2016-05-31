@@ -1116,10 +1116,11 @@
       //Set SFDC API URL for Contact Search
       var URLBase = this.APIBase + "query/?q=";
       var Contact = this.TktEmail.replace("#", "%23").replace("$", "%24").replace("%", "%25").replace("&", "%26").replace("'", "%27").replace("(", "%28").replace(")", "%29").replace("*", "%2A").replace("+", "%2B").replace(",", "%2C").replace("-", "%2D").replace("/", "%2F").replace("~", "%7E");
-      var action = "SELECT+Contact.Account.Id,Contact.Account.Name,Contact.FirstName,Contact.LastName,Contact.Account.OwnerId+FROM+Contact+WHERE+email='" + Contact + "'";
+      var action = "SELECT+Contact.Account.Id,Contact.Account.Name,Contact.FirstName,Contact.LastName,Contact.Account.OwnerId,Contact.Owner.Id+FROM+Contact+WHERE+email='" + Contact + "'";
+
 
       //Debug Mode & Debug Object Mode - Log to Console
-      this.consoleDebug("object", 'Optmiizely SFDC - API Call -  ', URLBase + action);
+      this.consoleDebug("object", 'Optimizely SFDC - API Call -  ', URLBase + action);
 
       //Make the Call to get the SFDC Contact via API
       this.ajax('fetchSFDCObject', URLBase + action)
@@ -1136,25 +1137,21 @@
             //Verify that the data returned has account returned
             if ((data.totalSize !== 0) && (data.records[0].Account !== null)) {
 
-
-              //Get the Plan Type and Subscriber from the data rerturned. 
               var PlanType = data.records[0].Account.Account_Plan_Derived__c;
               var Subscriber = data.records[0].Account.recurly__Subscriber__c;
-
-              //Data check, make sure the account is subscribed. If they aren't send it to the Lead check
-              if (Subscriber) {
-
-                //Debug Mode - Log to Console 
-                this.consoleDebug("normal", 'OptimizelySFDC - Info- Search Account -  SFDC Data Returned - Account was found that was active. ');
 
                 //Check to see if the account is Gold, Platinum, or Agency. 
                 if (PlanType === "platinum" || PlanType === "gold" || PlanType === "agency") {
 
+                  if (data.records[0].Owner.Id !== null) {
+                      this.ChatterOwnerName = data.records[0].Owner.Id;
+                  }
+
 
                   this.ChatterRecordId = data.records[0].Account.Id;
-                  this.ChatterOwnerId = data.records[0].Account.OwnerId;
+                  this.ChatterOwnerId = data.records[0].Owner.Id;
                   this.OrgName = data.records[0].Account.Name;
-                  this.ChatterOwnerName = data.records[0].Account.Owner.Name;
+                  //this.ChatterOwnerName = data.records[0].Account.Owner.Name;
 
 
                   //Render the Confirmation screen to present data back to the user
@@ -1170,11 +1167,14 @@
 
                     this.consoleDebug("normal", 'OptimizelySFDC - Info- Search Contact -  SFDC Data Returned - Account was found but it was not Gold, Platinum, or Agency. Business rules overriden since it is an already qualified lead');
 
+                    if (data.records[0].Account.Owner !== null) {
+                      this.ChatterOwnerName = data.records[0].Owner.Id;
+                    }
+
                     //Render the Confirmation screen to present data back to the user
                     this.ChatterRecordId = data.records[0].Account.Id;
                     this.ChatterOwnerId = data.records[0].Account.OwnerId;
                     this.OrgName = data.records[0].Account.Name;
-                    this.ChatterOwnerName = data.records[0].Account.Owner.Name;
 
                     this.RecordType = "Account";
                     this.renderConfirmation1("Step 1 - Chatter Notification Options");
@@ -1186,16 +1186,6 @@
 
 
                 }
-                //End check for Subscriber
-              }
-
-              //If not a subscribed account, then look for the account as a lead
-              else {
-                this.consoleDebug("normal", 'OptimizelySFDC - Info- Search Account via Contact -  SFDC Data Returned - Account was found but it was not active. Business Rules say to search for Lead');
-
-                //Look for Lead
-                this.search3CheckLead();
-              }
               //End check that data has been returned
             }
 
@@ -1291,10 +1281,13 @@
           //Check to see if Data is Done and that TotalSize of Object is not 0
           if ((data.done) && (data.totalSize !== 0)) {
 
+            if (data.records[0].SDR_Owner__r !== null) {
+              this.ChatterOwnerName = data.records[0].SDR_Owner__r.FirstName + " " + data.records[0].SDR_Owner__c.LastName;
+            }
             ///Lead Successfully found.  Store info and resent Confirmation Screen
             this.ChatterRecordId = data.records[0].Id;
             this.ChatterOwnerId = data.records[0].SDR_Owner__c;
-            this.ChatterOwnerName = data.records[0].SDR_Owner__r.FirstName + " " + data.records[0].SDR_Owner__c.LastName;
+            //this.ChatterOwnerName = data.records[0].SDR_Owner__r.FirstName + " " + data.records[0].SDR_Owner__c.LastName;
             this.LeadName = data.records[0].Name;
             this.LeadStatus = data.records[0].Status;
             this.LeadConvertedStatus = data.records[0].IsConverted;
