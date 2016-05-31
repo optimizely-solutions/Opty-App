@@ -693,10 +693,6 @@
 
       //Set Ticket Information into variables and store them into local storage
       var currentTicket = this.ticket();
-      //             this.TktEmail = currentTicket.requester().email();
-      //             this.TktName = currentTicket.requester().name();
-      //             this.TktUserId = currentTicket.requester().id();
-      //             this.TktSubject = currentTicket.subject();
       var org = currentTicket.organization();
       var user = currentTicket.requester();
 
@@ -717,7 +713,10 @@
       } else {
         this.churnRisk = 'no';
       }
-      //this.churnRisk=data.organizations[0].churn_risk;
+      this.enterpriseTrial = org.customField("is_enterprise_trial"); //boolean
+      if(this.enterpriseTrial === true){
+          this.checkTrialStatus();
+      };
       this.subscription_id = org.customField("subscription_id");
 
       //End get org information
@@ -798,6 +797,39 @@
 
 
       //End getAccountInfo function
+    },
+      
+    checkTrialStatus: function(){
+        var currentTicket = this.ticket();
+        var org = currentTicket.organization();
+        //var date = new Date();
+        var msg = '';
+                
+        this.subscriptionStatus = org.customField("subscription_status"); //should = trial_sub
+        this.trialStart = org.customField("trial_start_date"); //date
+        this.trialEnd = org.customField("trial_end_date"); //date
+        this.enterprisePotential = org.customField("has_enterprise_potential"); //boolean
+        
+        if(this.enterprisePotential === true){
+            msg = "This account has been flagged as having Enterprise potential!";
+        }
+        if(this.subscriptionStatus === 'trial_sub'){
+            msg = "This account is on an active Enterprise Trial";
+            if(this.trialEnd !== null){
+                msg = "This account is on an active Enterprise Trial which ends "+this.trialEnd+".";
+            }
+        }
+        else {
+            msg = "This account was on an Enterprise Trial that has expired. Please contact sales via Chatter.";
+        }
+        this.showEnterpriseStatus(msg);
+    },
+      
+    showEnterpriseStatus: function(msg){
+        this.$('section[trial-status]')
+        .html(this.renderTemplate('trialStatus', {
+          message: msg
+        }));
     },
 
 

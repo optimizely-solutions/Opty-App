@@ -1,3 +1,7 @@
+<div id="trialStatusWrapper">
+    <section trial-status/>
+</div>
+
 <div id='button_container'>
 
  <p class="group-label">Impersonate:</p> 
@@ -136,23 +140,7 @@
     </ul>
   </div>
 
-<!-- Knowledge Dump Button [DEPRECATED] -->
-<!--  <a id='knowledge_dump' class='btn btn-large btn-inverse btn-blue' target='_blank' href="https://docs.google.com/document/d/1W6TMtB1zBGYKpDE5oOS9dzKgDOMFTgKwTLodJCFgJaY/edit"><i class="icon-file"></i>Troubleshooting Guide</a>-->
 
-<!-- Jira Button [DEPRECATED]-->
-<!--
-  <a id='jira_dashboard' class='btn btn-large btn-inverse btn-blue' target='_blank' href="https://optimizely.atlassian.net/secure/Dashboard.jspa"><i class="icon-cog"></i>JIRA Dashboard</a>
-
-<hr />
--->
-
-<!-- Feedback Link [MOVED TO BOTTOM] -->
-
-<!--
-<a id="feedback_link" class='btn btn-large btn-inverse btn-blue' target='_blank' href="https://optimizely.atlassian.net/secure/CreateIssueDetails!init.jspa?pid=14702&issuetype=3&priority=3&customfield_13500=12401&summary=Opty+App+Feedback&description=Write+feedback+here">
-    <i class="icon-list-alt"></i>Give Feedback
-  </a>  
--->
 
 <hr />
 
