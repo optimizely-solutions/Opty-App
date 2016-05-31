@@ -716,7 +716,7 @@
       this.enterpriseTrial = org.customField("is_enterprise_trial"); //boolean
       if(this.enterpriseTrial === true){
           this.checkTrialStatus();
-      };
+      }
       this.subscription_id = org.customField("subscription_id");
 
       //End get org information
