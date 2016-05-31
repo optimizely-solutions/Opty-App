@@ -368,12 +368,21 @@ header h3 {
   color:#90b71c;
 }
 
-section[trial-status] > p {
+section[potential-status] > p,section[trial-status] > p {
     background-color:pink;
     padding:5px;
     margin-bottom:8px;
     text-align:center;
     border-radius:5px;
-/*    box-shadow: 3px 3px 5px #888888;*/
 }
 
+/*
+section[potential-status] > p {
+    background-color:gold;
+    padding:5px;
+    margin-bottom:8px;
+    text-align:center;
+    border-radius:5px;
+}
+
+*/

@@ -713,9 +713,12 @@
       } else {
         this.churnRisk = 'no';
       }
-      this.enterpriseTrial = org.customField("is_enterprise_trial"); //boolean
-      if(this.enterpriseTrial === true){
+      if(org.customField("is_enterprise_trial") === true){
           this.checkTrialStatus();
+      }
+      if(org.customField("has_enterprise_potential") === true){
+          var msg = "Enterprise potential!";
+          this.showPotential(msg);
       }
       this.subscription_id = org.customField("subscription_id");
 
@@ -761,15 +764,15 @@
       this.sfdcAccount = accUrl;
       this.sfdcUser = userUrl;
 
-      //function to format the renewal date
-      var formatRenewalDate = function(renew) {
-        var newDate = new Date(renew);
-        var newDateString = newDate.toDateString();
-        var final = newDateString == 'Thu Jan 01 1970' || newDateString == 'Invalid Date' ? '' : newDateString;
-        return final;
-      };
+//      //function to format the renewal date
+//      var formatRenewalDate = function(renew) {
+//        var newDate = new Date(renew);
+//        var newDateString = newDate.toDateString();
+//        var final = newDateString == 'Thu Jan 01 1970' || newDateString == 'Invalid Date' ? '' : newDateString;
+//        return final;
+//      };
       //format renewal date before rendering template
-      this.formattedRenewal = formatRenewalDate(this.renewal);
+      this.formattedRenewal = this.formatDate(this.renewal);
 
 
       this.$('section[account-notes]')
@@ -799,34 +802,51 @@
       //End getAccountInfo function
     },
       
+    formatDate : function(date){
+        var newDate = new Date(date);
+        var newDateString = newDate.toDateString();
+        var final = newDateString === 'Thu Jan 01 1970' || newDateString === 'Invalid Date' ? '' : newDateString;
+        return final;
+     },
+      
     checkTrialStatus: function(){
         var currentTicket = this.ticket();
         var org = currentTicket.organization();
-        //var date = new Date();
+        var now = new Date();
         var msg = '';
-                
-        this.subscriptionStatus = org.customField("subscription_status"); //should = trial_sub
-        this.trialStart = org.customField("trial_start_date"); //date
-        this.trialEnd = org.customField("trial_end_date"); //date
-        this.enterprisePotential = org.customField("has_enterprise_potential"); //boolean
         
-        if(this.enterprisePotential === true){
-            msg = "This account has been flagged as having Enterprise potential!";
+        this.subscriptionStatus = org.customField("subscription_status"); //should = trial_sub
+        this.trialStart = new Date(org.customField("trial_start_date")); //date
+        this.trialEnd = new Date(org.customField("trial_end_date")); //date
+        
+        if(this.subscriptionStatus === 'active_sub'){
+            return;
         }
-        if(this.subscriptionStatus === 'trial_sub'){
-            msg = "This account is on an active Enterprise Trial";
-            if(this.trialEnd !== null){
-                msg = "This account is on an active Enterprise Trial which ends "+this.trialEnd+".";
+        else if(this.subscriptionStatus === 'trial_sub'){
+            msg = "Active Enterprise Trial";
+            if(this.trialEnd !== null && this.trialEnd > now){
+                msg = "Active Enterprise Trial until "+this.formatDate(this.trialEnd)+".";
+            }
+            else if(this.trialEnd < now){
+                msg = "Enterprise Trial expired on "+this.formatDate(this.trialEnd)+". Please contact sales via Chatter.";
             }
         }
         else {
-            msg = "This account was on an Enterprise Trial that has expired. Please contact sales via Chatter.";
+            msg = "Enterprise Trial expired. Please contact sales via Chatter.";
         }
         this.showEnterpriseStatus(msg);
+        
     },
       
     showEnterpriseStatus: function(msg){
         this.$('section[trial-status]')
+        .html(this.renderTemplate('trialStatus', {
+          message: msg
+        }));
+    },
+      
+    showPotential: function(msg){
+        this.$('section[potential-status]')
         .html(this.renderTemplate('trialStatus', {
           message: msg
         }));

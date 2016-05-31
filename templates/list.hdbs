@@ -1,4 +1,5 @@
 <div id="trialStatusWrapper">
+    <section potential-status/>
     <section trial-status/>
 </div>
 
