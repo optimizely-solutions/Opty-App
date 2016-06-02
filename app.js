@@ -88,13 +88,22 @@
             "body": {
               messageSegments: [{
                 type: "mention",
-                id: this.ChatterOwnerId
+                id: this.ChatterOpenerId
+              }, {
+                type: "mention",
+                id: this.ChatterAEId
+              }, {
+                type: "mention",
+                id: this.ChatterCSMId
               }, {
                 type: "mention",
                 id: this.SDRLeadId
               }, {
                 type: "text",
                 "text": this.ChatterMessage + ' Notification By ' + this.currentUser().name()
+              }, {
+                type: "link",
+                url: "https://optimizely.zendesk.com/agent/tickets/" + this.ticket().id()
               }]
             }
 
@@ -127,35 +136,6 @@
         };
       },
 
-      createLead: function() {
-
-        return {
-
-          url: "https://na28.salesforce.com/services/data/v20.0/sobjects/Lead/",
-          headers: {
-            'Authorization': 'OAuth ' + this.store('SecurityToken')
-          },
-          contentType: 'application/json',
-          type: 'POST',
-          data: JSON.stringify({
-            LastName: this.LeadLN,
-            FirstName: this.LeadFN,
-            LeadSource: this.LeadSource,
-            Company: this.LeadCompany,
-            Email: this.TktEmail,
-            Status: this.LeadStatus,
-            Lead_Source_Category__c: this.LeadCategory,
-            Lead_Source_Subcategory__c: this.LeadSubCategory
-          })
-        };
-      }
-
-
-
-
-
-
-
       //SFDC Opty App Requests End Here ------------------------------------------------------------------>
 
 
@@ -177,13 +157,10 @@
       'click #chatter_button': 'sfdcGetInfo',
       'click #postchatter': 'ChatterConfirmation',
       'click span.notesHeader': 'toggleNotes',
-      'click #createlead': 'SFDCCreateLead',
       'click #leadcontinue': 'LeadWait',
-      'click #changeSDR': 'changeSDR',
       'click #linksetting': 'setLinkSetting',
       'click #countrysetting': 'setCountrySetting',
       'click #switchlead': 'switchLeadCountry',
-      'click #sdrsave': 'changeSDR',
       'click #cancelSDR': 'cancelChange',
       'click #btnSendMobile': 'changeRecipientMobile',
       'click a.validation': 'validateExperimentId',
@@ -267,6 +244,12 @@
       this.ChatterRecordId = "";
       this.ChatterOwnerId = "";
       this.ChatterOwnerName = "";
+      this.ChatterAE = "";
+      this.ChatterAEId = "";
+      this.ChatterCSM = "";
+      this.ChatterCSMId = "";
+      this.ChatterOpener = "";
+      this.ChatterOpenerId = "";
       this.OrgId = "";
       this.OrgName = "";
       this.LeadName = "";
@@ -695,11 +678,13 @@
       var currentTicket = this.ticket();
       var org = currentTicket.organization();
       var user = currentTicket.requester();
+      console.log("org is " + org);
+      this.accountName = "";
 
+      if (org) {
+        this.accountName = org.name();
+      }
 
-      //Use the Zendesk API to get the Org data
-      //example URL: https://optimizely.zendesk.com/api/v2/users/1070462067/organizations.json
-      this.accountName = org.name();
       this.csm = org.customField("zendesk_assigned_csm");
       this.subscriptionMrr = org.customField("subscription_mrr");
       this.renewal = org.customField("subscription_start_date");
@@ -884,6 +869,9 @@
       this.ChatterRecordId = "";
       this.chatterOwnerId = "";
       this.ChatterOwnerName = "";
+      this.ChatterCSM = "";
+      this.ChatterOpener = "";
+      this.ChatterAE = "";
       this.LeadName = "";
       this.LeadLN = "";
       this.LeadFN = "";
@@ -897,52 +885,27 @@
       this.TktName = currentTicket.requester().name();
       this.TktUserId = currentTicket.requester().id();
       this.TktSubject = currentTicket.subject();
+      this.TktOrg = currentTicket.organization();
+      this.TktOrgName = "";
+      if (this.TktOrg) {
+        this.TktOrgName = this.TktOrg.name();
+      }
 
       //Debug Mode - Log to Console
       this.consoleDebug("normal", 'OptimizelySFDC - Success - Zendesk Information Retrieved and stored in local storage ');
-      this.consoleDebug("normal", "OptimizelySFDC - Info - Basic Ticket Information -  Email= " + this.TktEmail + "; Name = " + this.TktName + "; UserID= " + this.TktUserId + "; Org=" + this.OrgName);
+      this.consoleDebug("normal", "OptimizelySFDC - Info - Basic Ticket Information -  Email= " + this.TktEmail + "; Name = " + this.TktName + "; UserID= " + this.TktUserId + "; Org=" + this.TktOrgName);
 
-      //Use the Zendesk API to get the Org, after you get the Org, check to see if it exists in SF
-      var UserAPIURL = "/api/v2/users/" + this.TktUserId + "/organizations.json";
-      this.ajax('fetchZendeskData', UserAPIURL)
-        .done(function(data) {
+      //Check if Org exists
+      if (this.TktOrg) {
+        this.consoleDebug("normal", 'OptimizelySFDC - Info - Starting SFDC Check on Subscription ');
+        this.search1CheckAccount();
+        this.OrgId = this.TktOrg.id();
+        this.OrgName = this.TktOrgName;
 
-          //Function that processes the request after the API call to Zendesk is made
-
-          //Debug Mode & Debug Object Mode - Log to Console
-          this.consoleDebug("object", 'Fetch Zendesk Org Data Object: ', data);
-
-          //Check to see if an Org was returned. If it isn't then go straight to check #2
-          //Treat an empty data return, or orgs with gmail.com, yahoo.com, hotmail.com, outlook.com as no org
-          if (data.count === 0 || (data.organizations[0].domain_names == "gmail.com" || data.organizations[0].domain_names == "yahoo.com" || data.organizations[0].domain_names == "hotmail.com" || data.organizations[0].domain_names === "outlook.com")) {
-
-            //If no org found, go directly to looking for the Contact in SFDC
-            this.search2CheckContact();
-
-            //Debug Mode - Log to Console
-            if (data.count === 0) {
-              this.consoleDebug("normal", 'OptimizelySFDC - Info - Bypassed check on Account because Zendesk didn\'t return an organization for the user');
-            } else {
-              this.consoleDebug("normal", 'OptimizelySFDC - Info - Bypassed check on Account because Zendesk org domain matched a generic email domain (eg gmail, yahoo, optimizely, etc)');
-            }
-          } else {
-
-            //If Org is found, pass that to local variables, and call the Search Account Function 
-            this.OrgId = data.organizations[0].id;
-            this.OrgName = data.organizations[0].name;
-
-            //Debug Mode - Log to Console
-            this.consoleDebug("normal", 'OptimizelySFDC - Info - Starting SFDC Check on Account ');
-
-            //StartCheck by going to search1CheckAccount
-            this.search1CheckAccount();
-          }
-
-
-        });
-
-
-      //End sfdcGetInfo function
+      } else {
+        this.consoleDebug("normal", 'OptimizelySFDC - Info - Bypassed check on Account because Zendesk didn\'t return an organization for the user');
+        this.search2CheckContact();
+      }
 
     },
 
@@ -987,20 +950,20 @@
 
     search1CheckAccount: function() {
 
-      //Function that looks up the Account in SFDC. 
+      //Function that looks up the Subscription in SFDC. 
       //If it exists at any point, then it goes to next function to search for Contact (search2CheckContact)
 
-
       //Debug Mode - Log to Console
-      this.consoleDebug("normal", 'OptimizelySFDC - Info - In search Account function ');
+      this.consoleDebug("normal", 'OptimizelySFDC - Info - In search Subscription function ');
 
-      //Set SFDC API URL for Account Search
+      //Set SFDC API URL for Subscription Search
+      // Get subscription code from the Organization name in Zendesk
       var numberPattern = /([0-9]+)/g;
-      var AccountName = this.OrgName.match(numberPattern);
+      var AccountName = this.TktOrgName.match(numberPattern);
       var URLBase = this.APIBase + "query/?q=";
 
       // Search for SFDC subscription records for a record which matches the snippet ID (account code)
-      var action = "SELECT+Id,Plan_Name__c,Subscriber__c,Status_zSub__c,Account__r.Account_ID_18_Char__c,Account__r.Team_Member_1__c,Account__r.Team_Member_1_First_Name__c,Account__r.Team_Member_1_Last_Name__c,Account__r.Team_Member_2__c,Account__r.Team_Member_2_First_Name__c+FROM+Subscription__c+WHERE+Account_Code__c='" + AccountName + "'";
+      var action = "SELECT+Id,Plan_Name__c,Subscriber__c,Status_zSub__c,Account__r.Account_ID_18_Char__c,Account__r.Team_Member_1__c,Account__r.Team_Member_1_First_Name__c,Account__r.Team_Member_1_Last_Name__c,Account__r.Team_Member_2__c,Account__r.Team_Member_2_First_Name__c,Account__r.Team_Member_4__c,Account__r.Team_Member_4_First_Name__c+FROM+Subscription__c+WHERE+Account_Code__c='" + AccountName + "'";
 
       //Debug Mode & Debug Object Mode - Log to Console
       this.consoleDebug("object", 'OptimizelySFDC - API Call -', URLBase + action);
@@ -1009,18 +972,18 @@
       this.ajax('fetchSFDCObject', URLBase + action)
         .done(function(data) {
           //Debug Mode & Debug Object Mode - Log to Console
-          this.consoleDebug("object", 'Fetch SFDC Fetch Account Data Object: ', data);
+          this.consoleDebug("object", 'Fetch SFDC Fetch Subscription Data Object: ', data);
 
           //SFDC Check 1 - If Data exists, look at what data is inside.
           if (data.done === true) {
 
             //Debug Mode - Log to Console
-            this.consoleDebug("normal", 'OptimizelySFDC - Info- Search Account -  SFDC Data Returned - Data Object had DONE record');
+            this.consoleDebug("normal", 'OptimizelySFDC - Info- Search Subscription -  SFDC Data Returned - Data Object had DONE record');
 
             //Check to make sure there is a record returned
             if (data.totalSize !== 0) {
               //Debug Mode - Log to Console
-              this.consoleDebug("normal", 'OptimizelySFDC - Info- Search Account -  SFDC Data Returned - Found that Data object has Account ID!');
+              this.consoleDebug("normal", 'OptimizelySFDC - Info- Search Subscription -  SFDC Data Returned - Found that Data object has Subscription ID!');
 
               //Get the Plan Type and Subscriber from the data rerturned. 
               var PlanType = data.records[0].Plan_Name__c;
@@ -1028,57 +991,62 @@
               var Status = data.records[0].Status_zSub__c;
               console.log(PlanType,Subscriber,Status);
 
-              //Data check, make sure the account is subscribed. If they aren't send it to the Lead check
               if (true) {
 
                 //Debug Mode - Log to Console
-                this.consoleDebug("normal", 'OptimizelySFDC - Info- Search Account -  SFDC Data Returned - Account was found that was active. ');
+                this.consoleDebug("normal", 'OptimizelySFDC - Info- Search Subscription -  SFDC Data Returned - Subscription was found that was active. ');
 
                 //Data check, make sure the account is Gold, Platinum, Agency 
                 if (PlanType.indexOf("latinum") > -1 || PlanType.indexOf("old") > -1 || PlanType.indexOf("gency") > -1 || PlanType.indexOf("nterprise") > -1) {
 
                   //Debug Mode - Log to Console
-                  this.consoleDebug("normal", 'OptimizelySFDC - Info- Search Account -  SFDC Data Returned - Account found was Gold, Platinum, or Agency. Chatter request should go to AE');
+                  this.consoleDebug("normal", 'OptimizelySFDC - Info- Search Subscription -  SFDC Data Returned - Subscription found was Gold, Platinum, Enterprise or Agency.');
 
                   //Account is subscribed, and plan is Platinum, Agency, Gold so store data into Chatter variables
                   this.ChatterRecordId = data.records[0].Account__r.Account_ID_18_Char__c;
                   this.ChatterOwnerId = data.records[0].Account__r.Team_Member_1__c;
-                  this.ChatterOwnerName = data.records[0].Account__r.Team_Member_1_First_Name__c + " " + data.records[0].Account__r.Team_Member_1_Last_Name__c;
+                  this.ChatterOwnerName = data.records[0].Account__r.Team_Member_1_First_Name__c;
+                  this.ChatterAE = data.records[0].Account__r.Team_Member_1_First_Name__c;
+                  this.ChatterAEId = data.records[0].Account__r.Team_Member_1__c;
+                  this.ChatterCSM = data.records[0].Account__r.Team_Member_2_First_Name__c;
                   this.ChatterCSMId = data.records[0].Account__r.Team_Member_2__c;
                   this.ChatterCSMName = data.records[0].Account__r.Team_Member_2_First_Name__c;
+                  this.ChatterOpenerId = data.records[0].Account__r.Team_Member_4__c;
+                  this.ChatterOpenerName = data.records[0].Account__r.Team_Member_4_First_Name__c;
+                  this.ChatterOpener = data.records[0].Account__r.Team_Member_4_First_Name__c;
 
 
                   //Change the screen to show the Chatter message post before going forward
                   this.RecordType = "Subscription";
-                  this.renderConfirmation1("Step 1 - Account Chatter Notification Options");
+                  this.renderConfirmation1("Step 1 - Subscription Chatter Notification Options");
                   //End check if plan type
                 } else {
 
                   //Account was found, but it was not a platinum, gold, or agency account. Check for lead and go from there. 
                   //If in debug mode, write to console 
-                  this.consoleDebug("normal", 'OptimizelySFDC - Info- Search Account -  SFDC Data Returned - Account was found but it was not Gold, Platinum, or Agency. Business Rules say search for Lead');
+                  this.consoleDebug("normal", 'OptimizelySFDC - Info- Search Subscription -  SFDC Data Returned - Subscription was found but it was not Gold, Platinum, or Agency. Business Rules say search for Lead');
 
                   //Call function to check for Lead
-                  this.search3CheckLead();
+                  this.search3CheckLead(data);
                 }
                 //End check on subscriber
               } else {
                 //Account is not subscribed, look for the person as a lead
                 //Debug Mode - Log to Console
-                this.consoleDebug("normal", 'OptimizelySFDC - Info- Search Account -  SFDC Data Returned - Account was found but it was not active. Business Rules say to search for Lead');
+                this.consoleDebug("normal", 'OptimizelySFDC - Info- Search Subscription -  SFDC Data Returned - Subscription was found but it was not active. Business Rules say to search for Lead');
 
                 //Call function to check for Lead
-                this.search3CheckLead();
+                this.search3CheckLead(data);
               }
             }
 
             //SFDC Object doesn't have Account ID, so there was an error in the search. Log to console and start Contact Record search
             else {
               //Debug Mode - Log to Console
-              this.consoleDebug("normal", 'OptimizelySFDC - Info- Search Account -  SFDC Data Returned - Account was not found, proceeding to contact search!');
+              this.consoleDebug("normal", 'OptimizelySFDC - Info- Search Account -  SFDC Data Returned - Subscription was not found, proceeding to contact search!');
 
               //Call function to check for Lead
-              this.search3CheckLead();
+              this.search3CheckLead(data);
             }
             //End check on Data=Done 
           }
@@ -1087,10 +1055,10 @@
           //If we recieved done object but it's not true, assume there is another error
           else {
             //Debug Mode - Log to Console
-            this.consoleDebug("normal", 'OptimizelySFDC - Error - Bypassed the Account check because it didn\'t return error or expected object!');
+            this.consoleDebug("normal", 'OptimizelySFDC - Error - Bypassed the Subscription check because it didn\'t return error or expected object!');
 
             //Proceed to check via Contact since we got unexpected error
-            this.search2CheckContact();
+            this.search2CheckContact(data);
           }
         })
 
@@ -1124,7 +1092,7 @@
     },
 
 
-    search2CheckContact: function() {
+    search2CheckContact: function(subInfo) {
 
       //Function that checks to see if an contact exits and if they roll up to an account. If they do, do the same as Search 1
       //If so, then it gets the AE, SDR information
@@ -1136,8 +1104,9 @@
       //Set SFDC API URL for Contact Search
       var URLBase = this.APIBase + "query/?q=";
       var Contact = this.TktEmail.replace("#", "%23").replace("$", "%24").replace("%", "%25").replace("&", "%26").replace("'", "%27").replace("(", "%28").replace(")", "%29").replace("*", "%2A").replace("+", "%2B").replace(",", "%2C").replace("-", "%2D").replace("/", "%2F").replace("~", "%7E");
-      var action = "SELECT+Contact.Account.Id,Contact.Account.Name,Contact.FirstName,Contact.LastName,Contact.Account.OwnerId,Contact.Owner.Id+FROM+Contact+WHERE+email='" + Contact + "'";
-
+      var action = "SELECT+Contact.Contact_ID_18_Char__c,Contact.Account.Id,Contact.Account.Name,Contact.FirstName,Contact.LastName,Contact.Account.OwnerId,Contact.Owner.Id+FROM+Contact+WHERE+email='" + Contact + "'";
+      console.log("subinfo");
+      console.log(subInfo);
 
       //Debug Mode & Debug Object Mode - Log to Console
       this.consoleDebug("object", 'Optimizely SFDC - API Call -  ', URLBase + action);
@@ -1155,7 +1124,7 @@
             this.consoleDebug("normal", 'OptimizelySFDC - Info- Search Contact -  SFDC Data Returned - Found that Data object had DONE Object');
 
             //Verify that the data returned has account returned
-            if ((data.totalSize !== 0) && (data.records[0].Account !== null)) {
+            if ((data.totalSize !== 0) && (data.records[0].Account != null)) {
 
               var PlanType = data.records[0].Account.Account_Plan_Derived__c;
               var Subscriber = data.records[0].Account.recurly__Subscriber__c;
@@ -1163,20 +1132,27 @@
                 //Check to see if the account is Gold, Platinum, or Agency. 
                 if (PlanType === "platinum" || PlanType === "gold" || PlanType === "agency") {
 
-                  if (data.records[0].Owner.Id !== null) {
+                  if (data.records[0].Owner.Id != null) {
                       this.ChatterOwnerName = data.records[0].Owner.Id;
                   }
 
 
-                  this.ChatterRecordId = data.records[0].Account.Id;
+                  this.ChatterRecordId = data.records[0].Contact_ID_18_Char__c;
                   this.ChatterOwnerId = data.records[0].Owner.Id;
-                  this.OrgName = data.records[0].Account.Name;
-                  //this.ChatterOwnerName = data.records[0].Account.Owner.Name;
+                  this.OrgName = data.records[0].Account__r.Name;
+                  this.ChatterAE = subInfo.records[0].Account__r.Team_Member_1_First_Name__c;
+                  this.ChatterAEId = subInfo.records[0].Account__r.Team_Member_1__c;
+                  this.ChatterCSM = subInfo.records[0].Account__r.Team_Member_2_First_Name__c;
+                  this.ChatterCSMId = subInfo.records[0].Account__r.Team_Member_2__c;
+                  this.ChatterCSMName = subInfo.records[0].Account__r.Team_Member_2_First_Name__c;
+                  this.ChatterOpenerId = subInfo.records[0].Account__r.Team_Member_4__c;
+                  this.ChatterOpenerName = subInfo.records[0].Account__r.Team_Member_4_First_Name__c;
+                  this.ChatterOpener = subInfo.records[0].Account__r.Team_Member_4_First_Name__c;
 
 
                   //Render the Confirmation screen to present data back to the user
-                  this.RecordType = "Account";
-                  this.renderConfirmation1("Step 1 - Account Chatter Notification Options");
+                  this.RecordType = "Contact";
+                  this.renderConfirmation1("Step 1 - Account Contact Notification Options");
 
                 } else {
                   //Account was found, but it was not a platinum, gold, or agency account. Check for lead and go from there. 
@@ -1187,16 +1163,24 @@
 
                     this.consoleDebug("normal", 'OptimizelySFDC - Info- Search Contact -  SFDC Data Returned - Account was found but it was not Gold, Platinum, or Agency. Business rules overriden since it is an already qualified lead');
 
-                    if (data.records[0].Account.Owner !== null) {
+                    if (data.records[0].Account.Owner != null) {
                       this.ChatterOwnerName = data.records[0].Owner.Id;
                     }
 
                     //Render the Confirmation screen to present data back to the user
-                    this.ChatterRecordId = data.records[0].Account.Id;
-                    this.ChatterOwnerId = data.records[0].Account.OwnerId;
+                    this.ChatterRecordId = data.records[0].Contact_ID_18_Char__c;
+                    this.ChatterOwnerId = data.records[0].Owner.Id;
                     this.OrgName = data.records[0].Account.Name;
+                    this.ChatterAE = subInfo.records[0].Account__r.Team_Member_1_First_Name__c;
+                    this.ChatterAEId = subInfo.records[0].Account__r.Team_Member_1__c;
+                    this.ChatterCSM = subInfo.records[0].Account__r.Team_Member_2_First_Name__c;
+                    this.ChatterCSMId = subInfo.records[0].Account__r.Team_Member_2__c;
+                    this.ChatterCSMName = subInfo.records[0].Account__r.Team_Member_2_First_Name__c;
+                    this.ChatterOpenerId = subInfo.records[0].Account__r.Team_Member_4__c;
+                    this.ChatterOpenerName = subInfo.records[0].Account__r.Team_Member_4_First_Name__c;
+                    this.ChatterOpener = subInfo.records[0].Account__r.Team_Member_4_First_Name__c;
 
-                    this.RecordType = "Account";
+                    this.RecordType = "Contact";
                     this.renderConfirmation1("Step 1 - Chatter Notification Options");
                   } else {
 
@@ -1270,7 +1254,9 @@
     },
 
 
-    search3CheckLead: function() {
+    search3CheckLead: function(subInfo) {
+
+      var subInformation = subInfo;
 
       //Function that checks to see if a lead exists, if so, find the owner and post to Chatter about that 
       //If so, then it gets the AE, SDR information
@@ -1301,8 +1287,8 @@
           //Check to see if Data is Done and that TotalSize of Object is not 0
           if ((data.done) && (data.totalSize !== 0)) {
 
-            if (data.records[0].SDR_Owner__r !== null) {
-              this.ChatterOwnerName = data.records[0].SDR_Owner__r.FirstName + " " + data.records[0].SDR_Owner__c.LastName;
+            if (data.records[0].SDR_Owner__r != null) {
+              this.ChatterOwnerName = data.records[0].SDR_Owner__r.FirstName + " " + data.records[0].SDR_Owner__r.LastName;
             }
             ///Lead Successfully found.  Store info and resent Confirmation Screen
             this.ChatterRecordId = data.records[0].Id;
@@ -1327,12 +1313,12 @@
               this.consoleDebug("normal", "OptimizelySFDC - Info - Lead found but it's already qualified. Going to search for the account via contact.");
 
               this.QualifiedLead = "Qualified";
-              this.search2CheckContact();
+              this.search2CheckContact(subInformation);
 
             } else if (this.LeadConvertedStatus) {
               this.consoleDebug("normal", "OptimizelySFDC - Info - Lead found but is already converted. Going to search for the account via contact.");
               this.QualifiedLead = "Converted";
-              this.search2CheckContact();
+              this.search2CheckContact(subInformation);
 
             } else {
               //Render the Confirmation screen to present data back to the user
@@ -1353,97 +1339,6 @@
 
         });
 
-
-
-    },
-
-    SFDCCreateLead: function() {
-      //Function to create Lead after user confirms the lead information
-
-      //Set Lead Information based on what the user inputted on the screen
-      this.LeadFN = this.$('input[name="leadfn"]').val();
-      this.LeadLN = this.$('input[name="leadln"]').val();
-      this.LeadCompany = this.$('input[name="leadcompany"]').val();
-
-
-
-
-
-      //Look at debug setting to see if we should make the call to Chatter or to the console. 
-      if (this.debugChatter) {
-
-        //Debug Code, and send message back to user
-        this.consoleDebug("normal", 'OptimizelySFDC - Success - Lead would have been created in normal non-debug mode - ' + this.LeadFN + ' ' + this.LeadLN + " with a company of " + this.LeadCompany);
-        this.renderMessage("Warning", "In Chatter debug mode, lead would've been created in normal mode.");
-        //this.renderLeadDone();
-
-      } else {
-
-        //Proceed with creating Lead since we are not in debug mode
-        //Debug Mode - Log to Console 
-        this.consoleDebug("normal", "Opty SFDC - Info - Starting Lead Creation Call");
-
-        //Make call SFDC to create the Lead
-        this.ajax('createLead')
-          .done(function(data) {
-            //Debug Mode & Debug Object Mode - Log to Console
-            this.consoleDebug("object", "Create SFDC Lead Data Object:", data);
-
-            //Confirm if the lead was created successfully
-            if (data.success && data.errors.length === 0) {
-
-              //Debug Mode - Log to Console
-              this.consoleDebug("normal", 'OptimizelySFDC - Success - Lead Created! ' + this.LeadFN + ' ' + this.LeadLN + ' + was created as a new lead in SFDC with a company of ' + this.LeadCompany);
-
-
-              this.newLeadId = data.id;
-
-
-              //Add information to the ticket
-              var ticket = this.ticket();
-              var currentDate = new Date();
-              ticket.tags().add("leadcreated");
-              var commentText = "Opty App - Internal Tracking - New Lead Created. Record Link = " + this.SFDCinstance + "/" + this.newLeadId + " LeadName = " + this.LeadFN + " " + this.LeadLN + ". Posted by " + this.currentUser().name() + " at " + currentDate;
-
-              var dataObject = {
-                "ticket": {
-                  "comment": {
-                    "public": false,
-                    "body": commentText
-                  }
-                }
-              };
-              var UserAPIURL = "/api/v2/tickets/" + this.ticket().id() + ".json";
-
-              this.ajax('updateZendeskData', UserAPIURL, dataObject)
-                .done(function(data) {
-                  //If in debug mode, write to console
-                  this.consoleDebug("object", 'ZD Ticket Update (Comment Update - New Lead):', data);
-
-                  //After successful update, update APP screen
-                  services.notify("Ticket Updated By Opty App - Internal Note for Lead Creation");
-                })
-                .fail(function(data) {
-                  this.consoleDebug("object", 'Error Updating Ticket for Sent Via:', data);
-                  services.notify("Error! Update to add ticket comment failed.");
-
-                });
-
-
-
-
-              this.renderLeadDone();
-
-            } else {
-              //Data returned points to error in creating lead. Log to console and present error to user 
-
-              //Debug Mode - Log to Console
-              this.consoleDebug("normal", "OptySFDC - Error - Error creating Lead!");
-              this.renderMessage("Error", "Lead not created due to error in leading creation process.");
-            }
-
-          });
-      }
 
 
     },
@@ -1615,69 +1510,6 @@
       this.$('#switchlead').addClass("show");
       this.$('#cancelSDR').removeClass("show");
       this.$('#cancelSDR').addClass("hide");
-      this.$('#changeSDR').text("Change Record Owner");
-
-
-    },
-
-    changeSDR: function() {
-
-      var editContainer = "";
-      if (this.$('#switchlead').text() === "Switch to EU Lead") {
-        editContainer = "#usSDR";
-      } else {
-        editContainer = "#euSDR";
-      }
-
-      if (this.$('#changeSDR').text() === "Change Record Owner") {
-        this.$(editContainer).removeClass("hide");
-        this.$(editContainer).addClass("show");
-        this.$(editContainer).css({
-          "display": "inline"
-        });
-        this.$('#switchlead').removeClass("show");
-        this.$('#switchlead').addClass("hide");
-        this.$('#cancelSDR').removeClass("hide");
-        this.$('#cancelSDR').addClass("show");
-
-        this.$('#changeSDR').text("Save Record Owner To:");
-
-      } else {
-        this.$(editContainer).addClass('hide');
-        this.$(editContainer).removeClass("show");
-        this.$(editContainer).css({
-          "display": "none"
-        });
-        this.ChatterOwnerId = this.$(editContainer + " option:selected").val();
-        this.ChatterOwnerName = this.$(editContainer + ' option:selected').text();
-        this.$('#RecordOwner').text(this.ChatterOwnerName);
-        this.$('#switchlead').addClass('show');
-        this.$('#switchlead').removeClass("hide");
-        this.$('#switchlead').addClass("show");
-        this.$('#cancelSDR').removeClass("show");
-        this.$('#cancelSDR').addClass("hide");
-        this.$('#changeSDR').text("Change Record Owner");
-
-      }
-
-    },
-
-    LeadWait: function() {
-      //Wait for 4 minutes before searching for the Lead and rendering the Chatter Confirmation screen for the lead
-
-      //Show loading screen
-      //this.$(this.sfdcmodal).removeClass("show");
-      //this.$(this.sfdcmodal).addClass("hide");
-      this.$("#loading").addClass("show");
-      this.$("#loading").removeClass("hide");
-      this.$("#loadingheader").text("Waiting five minutes for lead data enrichment process to end. The Chatter confirmation screen will show once complete.");
-      this.sfdcmodal = "#loading";
-
-      var self = this;
-      this.timeoutId = setTimeout(function() {
-        self.search3CheckLead();
-      }, 240000);
-
 
     },
 
@@ -1692,9 +1524,9 @@
         RecordNameValue = this.OrgName;
       }
 
-      this.ChatterMessage = "A Sales related email came through via Zendesk. Please look at the ticket titled \"" + this.TktSubject + "\" from " + this.TktName + " for detailed information. The information is available in the Zendesk Object on the " + this.RecordType + " screen. ";
-      if (this.ChatterOwnerName == 'null null') {
-        this.ChatterOwnerName = "Not Assigned. SDR Lead only will be notified";
+      this.ChatterMessage = "<TYPE YOUR MESSAGE HERE. PLEASE INCLUDE AS MUCH CONTEXT AS POSSIBLE FOR THE SALES HUMAN/CSM>";
+      if (this.ChatterOwnerName === '') {
+        this.ChatterOwnerName = "No team assigned. Opener Lead only will be notified";
       }
 
       //Update section of confirmation page with update value
@@ -1705,6 +1537,9 @@
       this.$('#RecordOwner').text(this.ChatterOwnerName);
       this.$('#SDRLead').text(this.SDRLeadName);
       this.$("textarea[name='chattermessage']").text(this.ChatterMessage);
+      this.$('#csm').text(this.ChatterCSM);
+      this.$('#ae').text(this.ChatterOpener);
+      this.$('#opener').text(this.ChatterAE);
 
       //Show the correct buttons
       this.modalButtonReset();
@@ -1722,9 +1557,6 @@
       this.$("#confirmation").addClass("show");
       this.$("#confirmation").removeClass("hide");
       this.sfdcmodal = "#confirmation";
-      
-
-
 
     },
 
@@ -1755,60 +1587,30 @@
     renderNewLead: function() {
       //Function to render New Lead on SFDC Modal
 
+      var req_email = this.ticket().requester().email();
+      console.log(req_email);
+
 
       //Show the correct buttons
       this.modalButtonReset();
       this.$('#createlead').removeClass('hidden');
       this.$('#createlead').addClass('shown');
+      this.$('#loading').removeClass('shown');
+      this.$('#loading').addClass('hidden');
+      this.$('#newlead').removeClass('hide');
+      this.$('#newlead').addClass('shown');
+      this.$('#email_addy').attr("href","https://na28.salesforce.com/_ui/search/ui/UnifiedSearchResults?searchType=2&sen=a44&sen=a02&sen=a35&sen=a2S&sen=0F9&sen=a5x&sen=a4W&sen=a2x&sen=a2z&sen=00O&sen=001&sen=00Q&sen=003&sen=005&sen=a4j&sen=006&sen=a0J&sen=a5r&str=" + req_email);
 
+      //this.$('#leadheader').text("No existing record found");
 
-      this.$('#leadheader').text("Create Lead - No existing record found");
-      this.$("input[name='leadln']").val(this.TktName.split(' ')[1]);
-      this.$("input[name='leadfn']").val(this.TktName.split(' ')[0]);
-      this.$("input[name='leadcompany']").val(this.TktEmail.split('@')[1]);
-      this.$('#leadstatus').text(this.LeadStatus);
-      this.$('#leadsource').text(this.LeadSource);
-
-      //Hide current screen and show message
-      this.$("#loading").addClass("hide");
-      this.$("#loading").removeClass("show");
-      this.$("#newlead").addClass("show");
-      this.$("#newlead").removeClass("hide");
       this.sfdcmodal = "#newlead";
 
 
     },
 
-    renderLeadDone: function() {
-      //Function to render lead creation confirmation. After a lead is created, it can take 5 minutes for the data enrichment is complete.
-      //Give the users the ability to close the screen and wait manually, show a timer when done, or manually check to see if data enrichment is done
-
-      //Show the correct buttons
-      this.modalButtonReset();
-      this.$('#createlead').removeClass('shown');
-      this.$('#createlead').addClass('hidden');
-      this.$('#leadcontinue').removeClass('hidden');
-      this.$('#leadcontinue').addClass('show');
-      this.$('#closetext').text('Close');
-
-      var leadLink = this.SFDCinstance + "/" + this.newLeadId;
-      this.$('#leadlink').text(leadLink);
-      this.$('#leadlink').attr("href", leadLink);
-
-
-      //Hide current screen and show message
-      //this.$(this.sfdcmodal).removeClass("show");
-      //this.$(this.sfdcmodal).addClass("hide");
-      this.$("#leadconf").addClass("show");
-      this.$("#leadconf").removeClass("hide");
-      this.sfdcmodal = "#leadconf";
-
-
-
-
-    },
-
     modalButtonReset: function() {
+
+      console.log("Calling modalButtonReset");
 
       //Function to reset the SFDC modal buttons and screens
       this.$('#createlead').removeClass("shown");
@@ -1822,8 +1624,6 @@
       this.$('#closetext').text('Cancel');
 
 
-
-
       if (this.store('countrysetting')) {
         this.$('#switchlead').text("Switch to US Lead");
         this.SDRLeadId = this.EULeadId;
@@ -1835,8 +1635,6 @@
         this.$('#switchlead').text("Switch to EU Lead");
         this.$('#SDRLead').text(this.SDRLeadName);
       }
-      
-
 
 
     },
@@ -1854,7 +1652,6 @@
         this.SDRLeadName = this.EULeadName;
       }
 
-      this.$('#changeSDR').text("Change Record Owner");
       this.$('#usSDR').css({
         "display": "none"
       });
@@ -1865,16 +1662,6 @@
       this.$('#euSDR').addClass('hide');
 
     }
-
-
-
-
-
-
-
-
-
-
 
     //SFDC Opty App Functions End Here ------------------------------------------------------------------>
 

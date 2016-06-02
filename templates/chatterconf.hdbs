@@ -2,11 +2,13 @@
 
 <b>Step {{step}} - Confirm Chatter Post</b>
 <br>
-<p>An SFDC {{RecordType}} was found. A chatter message will be posted on that {{RecordType}} to the owner listed on the {{RecordType}}. Please review the message and make any updates, prior to confirming the post.</p>
+<p>An SFDC {{RecordType}} was found. A chatter message will be posted on that {{RecordType}} to the team members listed on the {{RecordType}}. Please review the message and make any updates, prior to confirming the post.</p>
 <br>
 <p><b>{{RecordType}} ID </b>= {{RecordId}}</p>
 <p><b>{{RecordType}} Name </b>={{RecordName}}</p>
-<p><b>{{RecordType}} Owner </b>={{ChatterName}}</p>
+<p><b>{{RecordType}} Opener </b>={{ChatterOpener}}</p>
+<p><b>{{RecordType}} AE </b>={{ChatterAE}}</p>
+<p><b>{{RecordType}} CSM </b>={{ChatterCSM}}</p>
 <p><b>SDR Owner </b><span id="SDRLead">{{SDRLeadName}}</span><br><br><button type="submit" class="buttons" id="btnSwitch">Switch to EU</button></p><br>
    <img class="tticon" id="tt2" src="{{assetURL 'info.png'}}" alt="tooltip" />
 
