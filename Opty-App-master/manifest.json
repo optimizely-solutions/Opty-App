@@ -1,0 +1,85 @@
+{
+  "name": "OptimizelyApp",
+  "author": {
+    "name": "Adrian Gregory",
+    "email": "adrian@optimizely.com"
+  },
+  "defaultLocale": "en",
+  "private": true,
+  "location": ["ticket_sidebar","new_ticket_sidebar"],
+  "frameworkVersion": "1.0",
+"parameters": [
+  {
+    "name": "sfdc",
+    "type": "text",
+    "required": true
+  },
+
+  {
+    "name": "clientid",
+    "type": "password",
+    "required": true
+  },
+
+  {
+    "name": "clientsecret",
+    "type": "password",
+    "required": true
+  },
+
+   {
+    "name": "refreshtoken",
+    "type": "password",
+    "required": true
+  },
+
+    {
+    "name": "sdrleadid",
+    "type": "text",
+    "required":true
+  },
+
+      {
+    "name": "sdrleadname",
+    "type": "text",
+    "required":true
+  },
+
+      {
+    "name": "eusdrleadid",
+    "type": "text",
+    "required":true
+  },
+
+      {
+    "name": "eusdrleadname",
+    "type": "text",
+    "required":true
+  },
+
+    {
+    "name": "excludesfdcid",
+    "type": "text"
+  },
+
+  {
+    "name": "debug",
+    "type": "checkbox"
+  },
+
+
+   {
+    "name": "debugobjects",
+    "type": "checkbox"
+  },
+
+
+     {
+    "name": "debugSFDCsend",
+    "type": "checkbox"
+  }
+
+]
+
+}
+

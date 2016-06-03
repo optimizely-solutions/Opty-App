@@ -1,0 +1,31 @@
+<div id='chatterconf'>
+
+<b>Step {{step}} - Confirm Chatter Post</b>
+<br>
+<p>An SFDC {{RecordType}} was found. A chatter message will be posted on that {{RecordType}} to the team members listed on the {{RecordType}}. Please review the message and make any updates, prior to confirming the post.</p>
+<br>
+<p><b>{{RecordType}} ID </b>= {{RecordId}}</p>
+<p><b>{{RecordType}} Name </b>={{RecordName}}</p>
+<p><b>{{RecordType}} Opener </b>={{ChatterOpener}}</p>
+<p><b>{{RecordType}} AE </b>={{ChatterAE}}</p>
+<p><b>{{RecordType}} CSM </b>={{ChatterCSM}}</p>
+<p><b>SDR Owner </b><span id="SDRLead">{{SDRLeadName}}</span><br><br><button type="submit" class="buttons" id="btnSwitch">Switch to EU</button></p><br>
+   <img class="tticon" id="tt2" src="{{assetURL 'info.png'}}" alt="tooltip" />
+
+
+<p>Chatter Message:<textarea rows="5" cols="50" name="chattermessage">{{ChatterMessage}}</textarea></p><i>Please make any updates if necessary</i><br>
+
+<br>
+<div class="bottomcontainer">
+    <button type="submit" class="buttons" id="btnChatterConf">Post to Chatter</button>
+    <button type="submit" class="buttons cancel" id="btnCancel">Cancel</button>
+     <img class="tticon" id="tt3" src="{{assetURL 'info.png'}}" alt="tooltip" />
+
+
+       <div id="helptext"><span id="tt2text"><b><u>Help Information</b></u><br>This information in SFDC that is presented for informational purposes. This is the {{RecordType}} record that will have the Chatter request posted to it.</span><span id="tt3text"><b><u>Help Information</b></u><br>Click this button after reviewing the chatter message. This will post to Chatter in SFDC to notify the Account Owner and SDR Lead. The Zendesk ticket will also be avalialbe via the {{RecordType}}.</span>
+    </div>
+</div>
+   
+
+
+</div>
