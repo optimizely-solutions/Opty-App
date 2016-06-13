@@ -169,7 +169,7 @@
       'click #collaborators li': 'addCollaborator',
       //'click #add_notes': 'this.updateAccNotes',
       //'blur #acc_notes_input': 'this.saveAccNotes',
-      //'click #collaborators li ul': 'addCollaborator',
+      
 
 
       //General Event Calls End Here -------------------------------------------------------------------------------------->
@@ -808,16 +808,16 @@
             return;
         }
         else if(this.subscriptionStatus === 'trial_sub'){
-            msg = "Active Enterprise Trial";
+            msg = "Active Free Trial";
             if(this.trialEnd !== null && this.trialEnd > now){
-                msg = "Active Enterprise Trial until "+this.formatDate(this.trialEnd)+".";
+                msg = "Active Free Trial until "+this.formatDate(this.trialEnd)+".";
             }
             else if(this.trialEnd < now){
                 msg = "Enterprise Trial expired on "+this.formatDate(this.trialEnd)+". Please contact sales via Chatter.";
             }
         }
         else {
-            msg = "Enterprise Trial expired. Please contact sales via Chatter.";
+            msg = "Free Trial expired. Please contact sales via Chatter.";
         }
         this.showEnterpriseStatus(msg);
         

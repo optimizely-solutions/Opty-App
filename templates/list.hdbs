@@ -59,68 +59,6 @@
   <!-- Post to Chatter Button -->
   <a id='chatter_button' class='btn btn-large btn-inverse btn-blue' data-toggle="modal" data-target=".modal_sfdc"><i class="icon-envelope" id='chatter_env'></i>Notify Sales Via Chatter</a>
 
-  <!-- Add Collaborator Button -->
-
-  <!--
-
-  <a id='collaborator_button' class='btn btn-large btn-inverse btn-blue'><i class="icon-user"></i>Add Collaborator</a>
-  <div id='collaborators' class='hide'>
-  <div style="width:50%;display:inline-block;text-align:center;padding-bottom:10px">SAN FRANCISCO</div>
-  <div style="width:50%;display:inline-block;float:right;text-align:center;padding-bottom:10px">AMSTERDAM</div>
-    <li style="width:50%;display:inline-block;text-align:center">
-      <ul style="display:block" class="btn">Amy</ul>
-      <ul style="display:block" class="btn">Brian</ul>
-      <ul style="display:block" class="btn">Bryce</ul>
-      <ul style="display:block" class="btn">Danny</ul>
-      <ul style="display:block" class="btn">David O</ul>
-      <ul style="display:block" class="btn">Devin</ul>
-      <ul style="display:block" class="btn">Lyndsey</ul>
-      <ul style="display:block" class="btn">Ted</ul>
-    </li>
-    <li style="width:50%;display:inline-block;float:right;text-align:center">
-      <ul style="display:block" class="btn">Allie</ul>
-      <ul style="display:block" class="btn">David S</ul>
-      <ul style="display:block" class="btn">Mario</ul>
-      <ul style="display:block" class="btn">Nils</ul>
-    </li>
-  </div>
-
--->
-
-
-  <!-- Form Options  -->
-  <!--
-  <div id="form_options" style="display:none;">
-
-    <a class="btn" id="btnSentVia" data-toggle="modal" data-target="#appModal"><span class="appModal"><i class="icon-user"></i>Change Email Sent From</span></a>
-    <a id="btnSendMobile" class="btn"><span class="Chatter"><i class="icon-user"></i>Sent From Mobile Support</span></a>
-
-    <div class="recipientWrapper">
-      <select id='newRecipient'>
-        <option value="support@optimizely.com">support@optimizely.com</option>
-        <option value="accounting@optimizely.com">accounting@optimizely.com</option>
-        <option value="mobile-support@optimizely.com">mobile-support@optimizely.com</option>
-      </select>
-
-      <span id="saveSentVia" class="btn appModal btn-inverse">Save</span>
-      <span class="helpText"><i>Changing this field will update who the email is sent from.</i></span>
-    </div>
-  </div> 
--->
-
-  <!--   Account lookup links [DEPRECATED]-->
-  <!--<span id="account_lookup_links" class="accountLinkHeader btn btn-inverse btn-blue"><i class="icon-search"></i>Account Lookup Links</span>-->
-  <!--
-
-<div id="linkWrapper">
-  <section data-links/>
--->
-
-  <!-- Not sure these are necessary/functional -->
-  <!-- <input type="checkbox" id="linksetting"/>&nbsp;<label for="linksetting">Keep Account Links Expanded</label>&nbsp;
-  <input type="checkbox" id="countrysetting"/>&nbsp;<label for="countrysetting">EMEA User</label>  -->
-  <!--</div>-->
-
 
 
   <!-- KB Article Links -->
@@ -128,16 +66,16 @@
 
   <div id="articleWrapper" style="display:none;">
     <ul>
-      <li><a target="_blank" href="https://help.optimizely.com/hc/en-us/articles/200039995?utm_source=zendesk&utm_medium=opty_app&utm_content=integrating_with_ua&utm_campaign=education">Integrating Optimizely with Google UA</a></li>
-      <li><a target="_blank" href="https://help.optimizely.com/hc/en-us/articles/201876450?utm_source=zendesk&utm_medium=opty_app&utm_content=audiences_descriptions&utm_campaign=education">Audience conditions: Descriptions and examples</a>
-        <li><a target="_blank" href="https://help.optimizely.com/hc/en-us/articles/200040095?utm_source=zendesk&utm_medium=opty_app&utm_content=implement_snippet&utm_campaign=education">Implement the Optimizely Snippet</a></li>
-        <li><a target="_blank" href="https://help.optimizely.com/hc/en-us/articles/200040675?utm_source=zendesk&utm_medium=opty_app&utm_content=redirect_experiments&utm_campaign=education">Redirect experiments: Test separate URLs </a></li>
-        <li><a target="_blank" href="https://help.optimizely.com/hc/en-us/articles/200107480?utm_source=zendesk&utm_medium=opty_app&utm_content=force_variation_parameters&utm_campaign=education">Force Variation Parameters</a></li>
-        <li><a target="_blank" href="https://help.optimizely.com/hc/en-us/articles/200133789?utm_source=zendesk&utm_medium=opty_app&utm_content=how_long_run_test&utm_campaign=education">How Long to Run a Test</a></li>
-        <li><a target="_blank" href="https://help.optimizely.com/hc/en-us/articles/200179074?utm_source=zendesk&utm_medium=opty_app&utm_content=editor_troubleshooting&utm_campaign=education">Troubleshooting: Pages not loading in the Editor</a></li>
-        <li><a target="_blank" href="https://help.optimizely.com/hc/en-us/articles/200040835?utm_source=zendesk&utm_medium=opty_app&utm_content=url_targeting&utm_campaign=education">URL Targeting</a></li>
-        <li><a target="_blank" href="https://help.optimizely.com/hc/en-us/articles/200039915?utm_source=zendesk&utm_medium=opty_app&utm_content=goals_measure_success&utm_campaign=education">Goals: Measure the success of your experiment</a></li>
-        <li><a target="_blank" href="https://help.optimizely.com/hc/en-us/articles/200040055?utm_source=zendesk&utm_medium=opty_app&utm_content=pricing_plan_changes&utm_campaign=education">Optimizely Pricing Plan Changes</a></li>
+      <li><a target="_blank" href="https://help.optimizely.com/Integrate_Other_Platforms/Integrating_Optimizely_with_Google_Universal_Analytics?utm_source=zendesk&utm_medium=opty_app&utm_content=integrating_with_ua&utm_campaign=education">Integrating Optimizely with Google UA</a></li>
+      <li><a target="_blank" href="https://help.optimizely.com/Target_Your_Visitors/Audience_conditions:_Descriptions_and_examples?utm_source=zendesk&utm_medium=opty_app&utm_content=audiences_descriptions&utm_campaign=education">Audience conditions: Descriptions and examples</a>
+        <li><a target="_blank" href="https://help.optimizely.com/Set_Up_Optimizely/Implement_the_Optimizely_snippet?utm_source=zendesk&utm_medium=opty_app&utm_content=implement_snippet&utm_campaign=education">Implement the Optimizely Snippet</a></li>
+        <li><a target="_blank" href="https://help.optimizely.com/Build_Experiments/Redirect_experiments:_Test_separate_URLs?utm_source=zendesk&utm_medium=opty_app&utm_content=redirect_experiments&utm_campaign=education">Redirect experiments: Test separate URLs </a></li>
+        <li><a target="_blank" href="https://help.optimizely.com/QA_and_Troubleshoot/Force_a_specific_variation_to_run?utm_source=zendesk&utm_medium=opty_app&utm_content=force_variation_parameters&utm_campaign=education">Force Variation Parameters</a></li>
+        <li><a target="_blank" href="https://help.optimizely.com/Analyze_Results/How_long_to_run_a_test?utm_source=zendesk&utm_medium=opty_app&utm_content=how_long_run_test&utm_campaign=education">How Long to Run a Test</a></li>
+        <li><a target="_blank" href="https://help.optimizely.com/QA_and_Troubleshoot/Troubleshooting:_Pages_not_loading_in_the_Editor?utm_source=zendesk&utm_medium=opty_app&utm_content=editor_troubleshooting&utm_campaign=education">Troubleshooting: Pages not loading in the Editor</a></li>
+        <li><a target="_blank" href="https://help.optimizely.com/Target_Your_Visitors/URL_Targeting:_Choose_where_your_experiment_runs?utm_source=zendesk&utm_medium=opty_app&utm_content=url_targeting&utm_campaign=education">URL Targeting</a></li>
+        <li><a target="_blank" href="https://help.optimizely.com/Track_Conversion_Goals/Goals:_Measure_the_success_of_your_experiment?utm_source=zendesk&utm_medium=opty_app&utm_content=goals_measure_success&utm_campaign=education">Goals: Measure the success of your experiment</a></li>
+        <li><a target="_blank" href="https://help.optimizely.com/Set_Up_Optimizely/Plan_types:_Features,_upgrading,_and_downgrading?utm_source=zendesk&utm_medium=opty_app&utm_content=pricing_plan_changes&utm_campaign=education">Optimizely Pricing Plan Changes</a></li>
     </ul>
   </div>
 
