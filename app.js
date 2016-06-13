@@ -438,7 +438,7 @@
                 var name = tag.split("_");
                 // Check if a last initial is included in the agent's name so that it can be added as well
                 if(name.length > 2){
-                    collaborators.push(name[1]+"_"+name[2])
+                    collaborators.push(name[1]+"_"+name[2]);
                 }
                 else{
                     collaborators.push(name[1]); 
