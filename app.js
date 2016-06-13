@@ -392,6 +392,7 @@
     },
 
     openCollaborator: function(){
+        this.highlightCollaborator();
         return this.$('#collaborators').slideToggle();
     },
       
@@ -417,12 +418,38 @@
 
 
     addCollaborator: function(element) {
-
       // Adds a tag with the collaborator's name
       var ticket = this.ticket();
       var tags = ticket.tags();
       var TSE_NAME = "collaborator_" + element.toElement.innerHTML.toLowerCase().split(" ").join("_");
       tags.add(TSE_NAME);
+      this.highlightCollaborator();
+    },
+      
+    
+    highlightCollaborator: function(){
+        // Function to find all collaborators on a ticket and highlight them
+        var ticket = this.ticket();
+        var tags = ticket.tags();
+        var collaborators = [];
+        // Check the ticket's tags for tagged collaborators
+        tags.forEach(function(tag){
+            if(tag.indexOf("collaborator_") != -1){
+                var name = tag.split("_");
+                // Check if a last initial is included in the agent's name so that it can be added as well
+                if(name.length > 2){
+                    collaborators.push(name[1]+"_"+name[2])
+                }
+                else{
+                    collaborators.push(name[1]); 
+                }
+            }
+        });
+        // Give all found collaborators the '.collab' class
+        collaborators.forEach(function(collab){
+            var selector = "li[name="+collab+"]";
+            this.$(selector).addClass("collab");
+        });
     },
 
 

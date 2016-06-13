@@ -23,38 +23,40 @@
 
   <hr style="float:clear;margin-top:40px" />
 
-  <!-- Add Collaborator Links -->
+    
+<!-- Add Collaborator Links -->
   <span id="collaborator_button" class="btn btn-inverse btn-blue"><i class="icon-user"></i>Add Collaborator</span>
 
   <div id="collaborators" style="display:none;">
     <div class="col left">
       <p>San Francisco</p>
       <ul>
-        <li class="btn-white-small btn">Amy</li>
-        <li class="btn-white-small btn">Brian</li>
-        <li class="btn-white-small btn">Bryce</li>
-        <li class="btn-white-small btn">Cy</li>
-        <li class="btn-white-small btn">Danny</li>
-        <li class="btn-white-small btn">David O</li>
-        <li class="btn-white-small btn">Derek</li>
-        <li class="btn-white-small btn">Devin</li>
-        <li class="btn-white-small btn">Holger</li>
-        <li class="btn-white-small btn">Lyndsey</li>
-        <li class="btn-white-small btn">Ted</li>
+        <li class="btn-white-small btn" name="amy">Amy</li>
+        <li class="btn-white-small btn" name="brian">Brian</li>
+        <li class="btn-white-small btn" name="bryce">Bryce</li>
+        <li class="btn-white-small btn" name="cy">Cy</li>
+        <li class="btn-white-small btn" name="danny">Danny</li>
+        <li class="btn-white-small btn" name="david_o">David O</li>
+        <li class="btn-white-small btn" name="derek">Derek</li>
+        <li class="btn-white-small btn" name="devin">Devin</li>
+        <li class="btn-white-small btn" name="holger">Holger</li>
+        <li class="btn-white-small btn" name="lyndsey">Lyndsey</li>
+        <li class="btn-white-small btn" name="ted">Ted</li>
       </ul>
     </div>
     <div class="col right">
       <p>Amsterdam</p>
       <ul>
-        <li class="btn-white-small btn">Allie</li>
-        <li class="btn-white-small btn">David S</li>
-        <li class="btn-white-small btn">Mario</li>
-        <li class="btn-white-small btn">Nils</li>
-        <li class="btn-white-small btn">Tibo</li>
+        <li class="btn-white-small btn" name="allie">Allie</li>
+        <li class="btn-white-small btn" name="david_s">David S</li>
+        <li class="btn-white-small btn" name="mario">Mario</li>
+        <li class="btn-white-small btn" name="nils">Nils</li>
+        <li class="btn-white-small btn" name="tibo">Tibo</li>
       </ul>
     </div>
   </div>
   <div style="clear:both"></div>
+
 
   <!-- Post to Chatter Button -->
   <a id='chatter_button' class='btn btn-large btn-inverse btn-blue' data-toggle="modal" data-target=".modal_sfdc"><i class="icon-envelope" id='chatter_env'></i>Notify Sales Via Chatter</a>
