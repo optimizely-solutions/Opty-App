@@ -710,106 +710,101 @@
 
       if (org) {
         this.accountName = org.name();
+          this.csm = org.customField("zendesk_assigned_csm");
+          this.subscriptionMrr = org.customField("subscription_mrr");
+          this.renewal = org.customField("subscription_start_date");
+          this.solutionsPartner = org.customField("partner_name");
+          this.accountMrr = org.customField("account_mrr");
+          this.orgDetails = org.customField("details");
+          //based on the 'High-Risk Account' checkbox at the org level
+          //data.organizations[0].churn_risk === true ? this.churnRisk='yes' : this.churnRisk='no';
+          if (org.churn_risk === true) {
+            this.churnRisk = 'yes';
+          } else {
+            this.churnRisk = 'no';
+          }
+          if(org.customField("is_enterprise_trial") === true){
+              this.checkTrialStatus();
+          }
+          if(org.customField("has_enterprise_potential") === true){
+              var msg = "Enterprise potential!";
+              this.showPotential(msg);
+          }
+          this.subscription_id = org.customField("subscription_id");
+
+          //End get org information
+
+          //Use the Zendesk API to get the User data
+          //example URL: https://optimizely.zendesk.com/api/v2/users/1070462067.json      
+          //Pass data to local variables
+          this.contactName = user.name();
+          this.timeZone = user.customField("time_zone");
+          this.phone = user.customField("user_phone_number");
+          this.developerCertified = user.customField("developer_certified_user");
+          this.platformCertified = user.customField("platform_certified_user");
+          this.recentTickets = user.customField("tickets_closed_this_month");
+          this.userDetails = user.details();
+          this.zendesk_salesforce_contact_id = user.customField("zendesk_salesforce_contact_id");
+          this.org = org.customField("id");
+          //End get contact information
+
+
+
+          //Set default Salesforce links to the overview pages for contacts, accounts and subscription
+          var orgUrl = "https://c.na28.visual.force.com/apex/Skuid_SubscriptionsTab?save_new=1&sfdc.override=1";
+          var accUrl = "https://c.na28.visual.force.com/apex/Skuid_AccountsTab?save_new=1&sfdc.override=1";
+          var userUrl = "https://c.na28.visual.force.com/apex/Skuid_ContactsTab?save_new=1&sfdc.override=1";
+
+          // If we have the contact id, account id or subscription id, update the links to go directly to this record
+          if (this.subscription_id !== undefined) {
+            orgUrl = "https://c.na28.visual.force.com/apex/Skuid_SubscriptionDetail?id=" + this.subscription_id + "&sfdc.override=1";
+          }
+          if (this.org !== undefined) {
+            accUrl = "https://c.na28.visual.force.com/apex/Skuid_AccountDetail?id=" + this.org + "&sfdc.override=1";
+          }
+          if (this.zendesk_salesforce_contact_id !== undefined) {
+            userUrl = "https://c.na28.visual.force.com/apex/Skuid_ContactDetail?id=" + this.zendesk_salesforce_contact_id + "&sfdc.override=1";
+          }
+
+          this.sfdcSubscription = "<p><a target='_blank' href=" + orgUrl + ">Go to SFDC Subscription</a></p>";
+          this.sfdcAccount = "<p><a target='_blank' href=" + accUrl + ">Go to SFDC Account</a></p>";
+          this.sfdcUser = "<p><a target='_blank' href=" + userUrl + ">Go to SFDC User</a></p>";
+
+          this.sfdcSubscription = orgUrl;
+          this.sfdcAccount = accUrl;
+          this.sfdcUser = userUrl;
+
+
+          //format renewal date before rendering template
+          this.formattedRenewal = this.formatDate(this.renewal);
+
+
+          this.$('section[account-notes]')
+            .html(this.renderTemplate('accountInfo', {
+              accountName: this.accountName,
+              csm: this.csm,
+              subscriptionMrr: this.subscriptionMrr,
+              accountMrr: this.accountMrr,
+              renewal: this.formattedRenewal,
+              solutionsPartner: this.solutionsPartner,
+              churnRisk: this.churnRisk,
+              contactName: this.contactName,
+              timeZone: this.timeZone,
+              phone: this.phone,
+              developerCertified: this.developerCertified,
+              platformCertified: this.platformCertified,
+              recentTickets: this.recentTickets,
+              orgDetails: this.orgDetails,
+              userDetails: this.userDetails,
+              sfdcSubscription: this.sfdcSubscription,
+              sfdcAccount: this.sfdcAccount,
+              sfdcUser: this.sfdcUser
+            }));
+
       }
-
-      this.csm = org.customField("zendesk_assigned_csm");
-      this.subscriptionMrr = org.customField("subscription_mrr");
-      this.renewal = org.customField("subscription_start_date");
-      this.solutionsPartner = org.customField("partner_name");
-      this.accountMrr = org.customField("account_mrr");
-      this.orgDetails = org.customField("details");
-      //based on the 'High-Risk Account' checkbox at the org level
-      //data.organizations[0].churn_risk === true ? this.churnRisk='yes' : this.churnRisk='no';
-      if (org.churn_risk === true) {
-        this.churnRisk = 'yes';
-      } else {
-        this.churnRisk = 'no';
-      }
-      if(org.customField("is_enterprise_trial") === true){
-          this.checkTrialStatus();
-      }
-      if(org.customField("has_enterprise_potential") === true){
-          var msg = "Enterprise potential!";
-          this.showPotential(msg);
-      }
-      this.subscription_id = org.customField("subscription_id");
-
-      //End get org information
-
-      //Use the Zendesk API to get the User data
-      //example URL: https://optimizely.zendesk.com/api/v2/users/1070462067.json      
-      //Pass data to local variables
-      this.contactName = user.name();
-      this.timeZone = user.customField("time_zone");
-      this.phone = user.customField("user_phone_number");
-      this.developerCertified = user.customField("developer_certified_user");
-      this.platformCertified = user.customField("platform_certified_user");
-      this.recentTickets = user.customField("tickets_closed_this_month");
-      this.userDetails = user.details();
-      this.zendesk_salesforce_contact_id = user.customField("zendesk_salesforce_contact_id");
-      this.org = org.customField("id");
-      //End get contact information
-
-
-
-      //Set default Salesforce links to the overview pages for contacts, accounts and subscription
-      var orgUrl = "https://c.na28.visual.force.com/apex/Skuid_SubscriptionsTab?save_new=1&sfdc.override=1";
-      var accUrl = "https://c.na28.visual.force.com/apex/Skuid_AccountsTab?save_new=1&sfdc.override=1";
-      var userUrl = "https://c.na28.visual.force.com/apex/Skuid_ContactsTab?save_new=1&sfdc.override=1";
-
-      // If we have the contact id, account id or subscription id, update the links to go directly to this record
-      if (this.subscription_id !== undefined) {
-        orgUrl = "https://c.na28.visual.force.com/apex/Skuid_SubscriptionDetail?id=" + this.subscription_id + "&sfdc.override=1";
-      }
-      if (this.org !== undefined) {
-        accUrl = "https://c.na28.visual.force.com/apex/Skuid_AccountDetail?id=" + this.org + "&sfdc.override=1";
-      }
-      if (this.zendesk_salesforce_contact_id !== undefined) {
-        userUrl = "https://c.na28.visual.force.com/apex/Skuid_ContactDetail?id=" + this.zendesk_salesforce_contact_id + "&sfdc.override=1";
-      }
-
-      this.sfdcSubscription = "<p><a target='_blank' href=" + orgUrl + ">Go to SFDC Subscription</a></p>";
-      this.sfdcAccount = "<p><a target='_blank' href=" + accUrl + ">Go to SFDC Account</a></p>";
-      this.sfdcUser = "<p><a target='_blank' href=" + userUrl + ">Go to SFDC User</a></p>";
-
-      this.sfdcSubscription = orgUrl;
-      this.sfdcAccount = accUrl;
-      this.sfdcUser = userUrl;
-
-//      //function to format the renewal date
-//      var formatRenewalDate = function(renew) {
-//        var newDate = new Date(renew);
-//        var newDateString = newDate.toDateString();
-//        var final = newDateString == 'Thu Jan 01 1970' || newDateString == 'Invalid Date' ? '' : newDateString;
-//        return final;
-//      };
-      //format renewal date before rendering template
-      this.formattedRenewal = this.formatDate(this.renewal);
-
-
-      this.$('section[account-notes]')
-        .html(this.renderTemplate('accountInfo', {
-          accountName: this.accountName,
-          csm: this.csm,
-          subscriptionMrr: this.subscriptionMrr,
-          accountMrr: this.accountMrr,
-          renewal: this.formattedRenewal,
-          solutionsPartner: this.solutionsPartner,
-          churnRisk: this.churnRisk,
-          contactName: this.contactName,
-          timeZone: this.timeZone,
-          phone: this.phone,
-          developerCertified: this.developerCertified,
-          platformCertified: this.platformCertified,
-          recentTickets: this.recentTickets,
-          orgDetails: this.orgDetails,
-          userDetails: this.userDetails,
-          sfdcSubscription: this.sfdcSubscription,
-          sfdcAccount: this.sfdcAccount,
-          sfdcUser: this.sfdcUser
-        }));
-
-
+        else {
+            this.showEnterpriseStatus("No organization associated with this ticket");
+        }
 
       //End getAccountInfo function
     },
