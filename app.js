@@ -957,6 +957,7 @@
         })
         .fail(function(data) {
           this.consoleDebug("object", "SDR User Request Failed", data);
+          console.log("Data is " + data);
           if (data.statusText.trim() === "Unauthorized") {
             this.consoleDebug("normal", 'OptimizelySFDC - Info - Initial attempt to get SFDC User object failed because of invalid session at Account Check. Going to get a new one!');
 
