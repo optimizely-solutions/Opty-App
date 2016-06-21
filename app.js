@@ -57,6 +57,7 @@
         return {
           url: URL,
           type: 'POST',
+          CORS: true,
           dataType: 'json'
         };
       },
