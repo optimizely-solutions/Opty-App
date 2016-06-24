@@ -31,11 +31,11 @@
     <div class="col left">
       <p>San Francisco</p>
       <ul>
-        <li class="btn-white-small btn" name="amy">Amy</li>
         <li class="btn-white-small btn" name="brian">Brian</li>
         <li class="btn-white-small btn" name="bryce">Bryce</li>
         <li class="btn-white-small btn" name="cy">Cy</li>
         <li class="btn-white-small btn" name="danny">Danny</li>
+        <li class="btn-white-small btn" name="darcey">Darcey</li>
         <li class="btn-white-small btn" name="david_o">David O</li>
         <li class="btn-white-small btn" name="derek">Derek</li>
         <li class="btn-white-small btn" name="devin">Devin</li>
@@ -51,6 +51,7 @@
         <li class="btn-white-small btn" name="david_s">David S</li>
         <li class="btn-white-small btn" name="mario">Mario</li>
         <li class="btn-white-small btn" name="nils">Nils</li>
+        <li class="btn-white-small btn" name="renée">Renée</li>
         <li class="btn-white-small btn" name="tibo">Tibo</li>
       </ul>
     </div>
