@@ -104,7 +104,7 @@
                 "text": this.ChatterMessage
               }, {
                 type: "text",
-                "text": ' Notification By ' + this.currentUser().name() + ". If you need further information, please follow up with " + this.currentUser().name() + " directly. You can view the customer's Zendesk ticket by clicking the link below. Please confirm once you have reached out to the customer by chattering " +  + this.currentUser().name()
+                "text": ' Notification By ' + this.currentUser().name() + ". If you need further information, please follow up with " + this.currentUser().name() + " directly. You can view the customer's Zendesk ticket by clicking the link below. Please confirm once you have reached out to the customer by chattering " + this.currentUser().name()
               }, {
                 type: "link",
                 url: "https://optimizely.zendesk.com/agent/tickets/" + this.ticket().id()
