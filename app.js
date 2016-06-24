@@ -101,7 +101,10 @@
                 id: this.SDRLeadId
               }, {
                 type: "text",
-                "text": this.ChatterMessage + '\n\nNotification By ' + this.currentUser().name() + ". If you need further information, please follow up with " + this.currentUser().name() + " directly. You can view the customer's Zendesk ticket by clicking the link below."
+                "text": this.ChatterMessage
+              }, {
+                type: "text",
+                "text": 'Notification By ' + this.currentUser().name() + ". If you need further information, please follow up with " + this.currentUser().name() + " directly. You can view the customer's Zendesk ticket by clicking the link below."
               }, {
                 type: "link",
                 url: "https://optimizely.zendesk.com/agent/tickets/" + this.ticket().id()
