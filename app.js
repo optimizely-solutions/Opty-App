@@ -99,7 +99,7 @@
               }, {
                 type: "mention",
                 id: this.SDRLeadId
-              },{
+              }, {
                 markupType: "Paragraph",
                 type: "MarkupBegin"
               }, {
@@ -109,8 +109,14 @@
                 markupType: "Paragraph",
                 type: "MarkupEnd"
               }, {
+                markupType: "Paragraph",
+                type: "MarkupBegin"
+              }, {
                 type: "text",
                 "text": 'Notification By ' + this.currentUser().name() + ". If you need further information, please follow up with " + this.currentUser().name() + " directly. You can view the customer's Zendesk ticket by clicking the link below."
+              }, {
+                markupType: "Paragraph",
+                type: "MarkupEnd"
               }, {
                 type: "link",
                 url: "https://optimizely.zendesk.com/agent/tickets/" + this.ticket().id()
