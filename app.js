@@ -727,14 +727,15 @@
           } else {
             this.churnRisk = 'no';
           }
-          if(org.customField("is_enterprise_trial") === true){
-              this.checkTrialStatus();
-          }
+//          if(org.customField("subscription_status") === 'trial_sub'){
+//              this.checkTrialStatus();
+//          }
           if(org.customField("has_enterprise_potential") === true){
               var msg = "Enterprise potential!";
               this.showPotential(msg);
           }
           this.subscription_id = org.customField("subscription_id");
+          this.checkTrialStatus();
 
           //End get org information
 
@@ -826,6 +827,7 @@
         var now = new Date();
         var msg = '';
         
+        this.isEnterpriseTrial = org.customField("is_enterprise_trial"); //boolean
         this.subscriptionStatus = org.customField("subscription_status"); //should = trial_sub
         this.trialStart = new Date(org.customField("trial_start_date")); //date
         this.trialEnd = new Date(org.customField("trial_end_date")); //date
@@ -835,16 +837,25 @@
         }
         else if(this.subscriptionStatus === 'trial_sub'){
             msg = "Active Free Trial";
-            if(this.trialEnd !== null && this.trialEnd > now){
+           
+//            else if(this.isEnterpriseTrial != true){
+//                msg = "Free Trial expired. Please contact sales via Chatter.";
+//            }
+        }
+        if(this.trialEnd !== null && this.trialEnd > now){
                 msg = "Active Free Trial until "+this.formatDate(this.trialEnd)+".";
-            }
-            else if(this.trialEnd < now){
-                msg = "Enterprise Trial expired on "+this.formatDate(this.trialEnd)+". Please contact sales via Chatter.";
-            }
         }
-        else {
-            msg = "Free Trial expired. Please contact sales via Chatter.";
+        else if(this.trialEnd < now){
+                msg = "Free Trial expired on "+this.formatDate(this.trialEnd)+". Please contact sales via Chatter.";
         }
+//        else {
+//            if(this.isEnterpriseTrial === true){
+//                msg = "Free Trial expired. Please contact sales via Chatter.";
+//            }
+//            else{
+//                return;
+//            }
+//        }
         this.showEnterpriseStatus(msg);
         
     },
