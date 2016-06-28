@@ -6,6 +6,7 @@
 <table id="subscription_notes">
 
 <tr><td class="title">Name: </td><td>{{accountName}}</td></tr>
+<tr><td class="title">Plan Type: </td><td>{{subscriptionPlan}}</td></tr>
 <tr><td class="title">High Risk? </td><td>{{churnRisk}}</td></tr>
 <tr><td class="title">Account Manager: </td><td>{{csm}}</td></tr>
 <tr><td class="title">Account MRR: </td><td>{{accountMrr}}</td></tr>

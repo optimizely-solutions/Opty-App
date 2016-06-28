@@ -365,7 +365,7 @@
 
       //[Account notes functionality] gather account information to make available for TSEs 
       this.getAccountInfo();
-
+      
     },
 
     validateExperimentId: function() {
@@ -720,6 +720,7 @@
           this.solutionsPartner = org.customField("partner_name");
           this.accountMrr = org.customField("account_mrr");
           this.orgDetails = org.customField("details");
+          this.subscriptionPlan = org.customField("subscription_plan");
           //based on the 'High-Risk Account' checkbox at the org level
           //data.organizations[0].churn_risk === true ? this.churnRisk='yes' : this.churnRisk='no';
           if (org.churn_risk === true) {
@@ -793,6 +794,7 @@
               renewal: this.formattedRenewal,
               solutionsPartner: this.solutionsPartner,
               churnRisk: this.churnRisk,
+              subscriptionPlan: this.subscriptionPlan,
               contactName: this.contactName,
               timeZone: this.timeZone,
               phone: this.phone,
