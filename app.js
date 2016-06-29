@@ -462,7 +462,7 @@
         // Indicate count of total collaborators
         var total = collaborators.length;
         if(total > 0){
-            this.$('#collaborator_count').html('( '+total+' )');
+            this.$('#collaborator_count').html('('+total+')');
         }
     },
 
@@ -719,7 +719,6 @@
       var currentTicket = this.ticket();
       var org = currentTicket.organization();
       var user = currentTicket.requester();
-      console.log("org is " + org);
       this.accountName = "";
 
       if (org) {
@@ -731,22 +730,21 @@
           this.accountMrr = org.customField("account_mrr");
           this.orgDetails = org.customField("details");
           this.subscriptionPlan = org.customField("subscription_plan");
+          this.highestPlan = currentTicket.customField('custom_field_32289497');
           //based on the 'High-Risk Account' checkbox at the org level
-          //data.organizations[0].churn_risk === true ? this.churnRisk='yes' : this.churnRisk='no';
           if (org.churn_risk === true) {
             this.churnRisk = 'yes';
           } else {
             this.churnRisk = 'no';
           }
-//          if(org.customField("subscription_status") === 'trial_sub'){
-//              this.checkTrialStatus();
-//          }
+
           if(org.customField("has_enterprise_potential") === true){
               var msg = "Enterprise potential!";
               this.showPotential(msg);
           }
           this.subscription_id = org.customField("subscription_id");
           this.checkTrialStatus();
+          this.isPlanSupported(this.subscriptionPlan, this.highestPlan);
 
           //End get org information
 
@@ -878,7 +876,14 @@
           message: msg
         }));
     },
-
+      
+    isPlanSupported: function(plan, highestPlan){
+        var supportedPlans = ["agency", "agency_platinum_one_year", "enterprise", "enterprise_elite", "enterprise_premium", "enterprise_professional", "enterprise_standard", "free", "free_developer", "free_employee", "free_enterprise_trial", "free_nonprofit", "free_partner_sandbox", "gold", "gold_one_year", "gold_two_year", "gold_startup_pack", "paygo", "platinum", "platinum_one_year", "platinum_two_year", "silver", "silver_one_year", "silver_sitepoint_discount", "silver_two_year", "silver_yc_appsumo_discount", "enterprise_premium_with_personalization_professional", "enterprise_premium_with_personalization_standard", "free_personalisation_trial"];
+        var notSupported = ["bronze", "bronze_one_year", "bronze_two_year", "bronze_yc_appsumo_discount", "starter"];
+        if (notSupported.indexOf(plan) > -1 || notSupported.indexOf(highestPlan) > -1){
+            this.showEnterpriseStatus('This plan type is not entitled to support!');
+        }
+    },
 
     sfdcGetInfo: function() {
 
