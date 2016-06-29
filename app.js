@@ -297,9 +297,9 @@
       this.checkIfInternal();
       this.AppInitialized();
         
-        //hide outdated ticket field
-        var subscription_plan = this.ticketFields('subscription_plan');
-        subscription_plan.hide();
+      //hide outdated ticket field        
+      var subscription_plan = this.ticketFields('custom_field_22704991');
+      subscription_plan.hide();
     },
 
     AppInitialized: function() {
