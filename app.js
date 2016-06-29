@@ -297,7 +297,7 @@
       this.checkIfInternal();
       this.AppInitialized();
         
-      //hide outdated ticket field        
+      //hide outdated Subscription Plan ticket field        
       var subscription_plan = this.ticketFields('custom_field_22704991');
       subscription_plan.hide();
     },
@@ -369,6 +369,7 @@
 
       //[Account notes functionality] gather account information to make available for TSEs 
       this.getAccountInfo();
+      this.highlightCollaborator();
       
     },
 
@@ -458,6 +459,11 @@
             var selector = "li[name="+collab+"]";
             this.$(selector).addClass("collab");
         });
+        // Indicate count of total collaborators
+        var total = collaborators.length;
+        if(total > 0){
+            this.$('#collaborator_count').html('( '+total+' )');
+        }
     },
 
 
