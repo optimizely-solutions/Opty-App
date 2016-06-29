@@ -296,6 +296,10 @@
       //function to check if the ticket was sent to internal-support@ and change the Sent Via field to support@ if necessary
       this.checkIfInternal();
       this.AppInitialized();
+        
+        //hide outdated ticket field
+        var subscription_plan = this.ticketFields('subscription_plan');
+        subscription_plan.hide();
     },
 
     AppInitialized: function() {
@@ -833,31 +837,24 @@
         this.subscriptionStatus = org.customField("subscription_status"); //should = trial_sub
         this.trialStart = new Date(org.customField("trial_start_date")); //date
         this.trialEnd = new Date(org.customField("trial_end_date")); //date
+        var trialEndString = this.trialEnd.toString();
         
         if(this.subscriptionStatus === 'active_sub'){
             return;
         }
         else if(this.subscriptionStatus === 'trial_sub'){
             msg = "Active Free Trial";
-           
-//            else if(this.isEnterpriseTrial != true){
-//                msg = "Free Trial expired. Please contact sales via Chatter.";
-//            }
         }
-        if(this.trialEnd !== null && this.trialEnd > now){
+        if(trialEndString.indexOf('Thu Jan 01 1970') > -1){
+            return;
+        }
+        else if(this.trialEnd > now){
                 msg = "Active Free Trial until "+this.formatDate(this.trialEnd)+".";
         }
         else if(this.trialEnd < now){
                 msg = "Free Trial expired on "+this.formatDate(this.trialEnd)+". Please contact sales via Chatter.";
         }
-//        else {
-//            if(this.isEnterpriseTrial === true){
-//                msg = "Free Trial expired. Please contact sales via Chatter.";
-//            }
-//            else{
-//                return;
-//            }
-//        }
+
         this.showEnterpriseStatus(msg);
         
     },
