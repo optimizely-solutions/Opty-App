@@ -730,6 +730,7 @@
           this.accountMrr = org.customField("account_mrr");
           this.orgDetails = org.customField("details");
           this.subscriptionPlan = org.customField("subscription_plan");
+          this.formattedPlan = this.formatTitle(this.subscriptionPlan);
           this.highestPlan = currentTicket.customField('custom_field_32289497');
           //based on the 'High-Risk Account' checkbox at the org level
           if (org.churn_risk === true) {
@@ -802,7 +803,7 @@
               renewal: this.formattedRenewal,
               solutionsPartner: this.solutionsPartner,
               churnRisk: this.churnRisk,
-              subscriptionPlan: this.subscriptionPlan,
+              subscriptionPlan: this.formattedPlan,
               contactName: this.contactName,
               timeZone: this.timeZone,
               phone: this.phone,
@@ -829,6 +830,11 @@
         var newDateString = newDate.toDateString();
         var final = newDateString === 'Thu Jan 01 1970' || newDateString === 'Invalid Date' ? '' : newDateString;
         return final;
+     },
+      
+     formatTitle : function(str) {
+        str = str.replace(/_/g, ' ');
+        return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
      },
       
     checkTrialStatus: function(){
@@ -880,9 +886,9 @@
     isPlanSupported: function(plan, highestPlan){
         //current list of available plans as of June 29, 2016
         var supportedPlans = ["agency", "agency_platinum_one_year", "enterprise", "enterprise_elite", "enterprise_premium", "enterprise_professional", "enterprise_standard", "free", "free_developer", "free_employee", "free_enterprise_trial", "free_nonprofit", "free_partner_sandbox", "gold", "gold_one_year", "gold_two_year", "gold_startup_pack", "paygo", "platinum", "platinum_one_year", "platinum_two_year", "silver", "silver_one_year", "silver_sitepoint_discount", "silver_two_year", "silver_yc_appsumo_discount", "enterprise_premium_with_personalization_professional", "enterprise_premium_with_personalization_standard", "free_personalisation_trial"];
-        var notSupported = ["bronze", "bronze_one_year", "bronze_two_year", "bronze_yc_appsumo_discount", "starter"];
-        if(notSupported.indexOf(highestPlan) > -1 && notSupported.indexOf(plan) > -1){
-            this.showEnterpriseStatus('This plan type is not entitled to support!');
+        var notSupported = ["bronze", "bronze_one_year", "bronze_two_year", "bronze_yc_appsumo_discount", "starter", ""];
+        if(supportedPlans.indexOf(highestPlan) === -1 && notSupported.indexOf(plan) > -1){
+            this.showEnterpriseStatus('This organization is not entitled to support!');
         }
         else {
             return;
