@@ -45,6 +45,18 @@
           data: dataobject
         };
       },
+        
+      //General Request to delete information from Zendesk API
+      deleteZendeskTag: function(URL, dataobject) {
+
+        return {
+          url: URL,
+          type: 'DELETE',
+          dataType: 'json',
+          accept: 'application/json',
+          data: dataobject
+        };
+      },
 
 
       //General Rquest Functions  End Here -------------------------------------------------------------------------------------->
@@ -171,6 +183,7 @@
       'click a.notes_link': 'toggleAccountNotes',
       'click #collaborator_button': 'openCollaborator',
       'click #collaborators li': 'addCollaborator',
+      'click #collaborators li.collab': 'removeCollaborator',
       //'click #add_notes': 'this.updateAccNotes',
       //'blur #acc_notes_input': 'this.saveAccNotes',
       
@@ -433,6 +446,25 @@
       var TSE_NAME = "collaborator_" + element.toElement.innerHTML.toLowerCase().split(" ").join("_");
       tags.add(TSE_NAME);
       this.highlightCollaborator();
+    },
+      
+    removeCollaborator: function(element) {
+      // Removes tag with the collaborator's name
+      var ticket = this.ticket();
+      var tags = ticket.tags();
+      var ticketAPIURL = "/api/v2/tickets/" + ticket.id() + "/tags.json";
+      var collab = element.toElement.innerHTML.toLowerCase().split(" ").join("_");
+      var selector = "li[name="+collab+"]";
+      this.$(selector).removeClass('collab');
+
+      var dataobject = {
+             "tags": ["collaborator_"+collab],
+      };
+
+      this.ajax('deleteZendeskTag', ticketAPIURL, dataobject)
+        .done(function(data) {
+            services.notify("Ticket Updated- Removed "+element.toElement.innerHTML+" as a collaborator");
+      });
     },
       
     
@@ -732,7 +764,6 @@
           this.orgDetails = org.customField("details");
           this.subscriptionPlan = org.customField("subscription_plan");
           this.inOnboarding = org.customField("account_in_onboarding") === true ? 'yes' : 'no';
-          console.log("in onboarding "+this.inOnboarding);
           this.formattedPlan = this.formatTitle(this.subscriptionPlan);
           this.highestPlan = currentTicket.customField('custom_field_32289497');
           //based on the 'High-Risk Account' checkbox at the org level

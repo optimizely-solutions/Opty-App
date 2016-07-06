@@ -375,19 +375,11 @@ header h3 {
 
 section[potential-status] > p,section[trial-status] > p {
     background-color:pink;
+    border-color:#9f2828;
+    border-width:1px;
+    border-style:solid;
     padding:5px;
     margin-bottom:8px;
     text-align:center;
     border-radius:5px;
 }
-
-/*
-section[potential-status] > p {
-    background-color:gold;
-    padding:5px;
-    margin-bottom:8px;
-    text-align:center;
-    border-radius:5px;
-}
-
-*/
