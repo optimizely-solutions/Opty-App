@@ -714,6 +714,7 @@
       //This is the same as sfdcGetInfo except for when it is initialized and what information is captured
       //Function will get the ticket information, and look up the Organization information using the Zendesk API. 
       //When an org is found, the app goes to the search for Account Function. If it isn't, it goes to the search for Contact function
+      //example org URL: https://optimizely.zendesk.com/api/v2/organizations/4681458087.json
 
       //Set Ticket Information into variables and store them into local storage
       var currentTicket = this.ticket();
@@ -730,14 +731,12 @@
           this.accountMrr = org.customField("account_mrr");
           this.orgDetails = org.customField("details");
           this.subscriptionPlan = org.customField("subscription_plan");
+          this.inOnboarding = org.customField("account_in_onboarding") === true ? 'yes' : 'no';
+          console.log("in onboarding "+this.inOnboarding);
           this.formattedPlan = this.formatTitle(this.subscriptionPlan);
           this.highestPlan = currentTicket.customField('custom_field_32289497');
           //based on the 'High-Risk Account' checkbox at the org level
-          if (org.churn_risk === true) {
-            this.churnRisk = 'yes';
-          } else {
-            this.churnRisk = 'no';
-          }
+          this.churnRisk = org.churn_risk === true ? 'yes' : 'no';
 
           if(org.customField("has_enterprise_potential") === true){
               var msg = "Enterprise potential!";
@@ -798,6 +797,7 @@
             .html(this.renderTemplate('accountInfo', {
               accountName: this.accountName,
               csm: this.csm,
+              inOnboarding: this.inOnboarding,
               subscriptionMrr: this.subscriptionMrr,
               accountMrr: this.accountMrr,
               renewal: this.formattedRenewal,

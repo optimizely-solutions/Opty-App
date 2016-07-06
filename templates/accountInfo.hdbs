@@ -9,6 +9,7 @@
 <tr><td class="title">Plan Type: </td><td>{{subscriptionPlan}}</td></tr>
 <tr><td class="title">High Risk? </td><td>{{churnRisk}}</td></tr>
 <tr><td class="title">Account Manager: </td><td>{{csm}}</td></tr>
+<tr><td class="title">In Onboarding? </td><td>{{inOnboarding}}</td></tr>
 <tr><td class="title">Account MRR: </td><td>{{accountMrr}}</td></tr>
 <tr><td class="title">Subscription MRR: </td><td>{{subscriptionMrr}}</td></tr>
 <tr><td class="title">Billing Start Date: </td><td>{{renewal}}</td></tr>
