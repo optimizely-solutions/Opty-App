@@ -636,22 +636,23 @@
         catch (err) {
           return true;
         }
+      }
       // Prevent ticket from being put on hold unless a reminder has been set in the Remind Me One Day Before field
       // unless the ticket form is Billing & Account questions
-      } else if (status === "hold") {
-        try {
-          var reminder = ticket.customField("custom_field_26075538");
-          var today = new Date();
-          console.log(reminder < today);
-          if (reminder === null && form != 32724) {
-            return "The ticket was not updated. Please set a reminder in the 'Remind me one day before:' field before placing the ticket on hold.";
-          } else if (reminder < today && form != 32724) {
-            return "The ticket was not updated. When placing a ticket on hold, the date in the 'Remind me one day before:' field must be a date in the future.";
-          }
-        } catch (err) {
-          return true;
-        }
-      }
+//      else if (status === "hold") {
+//        try {
+//          var reminder = ticket.customField("custom_field_26075538");
+//          var today = new Date();
+//          console.log(reminder < today);
+//          if (reminder === null && form != 32724) {
+//            return "The ticket was not updated. Please set a reminder in the 'Remind me one day before:' field before placing the ticket on hold.";
+//          } else if (reminder < today && form != 32724) {
+//            return "The ticket was not updated. When placing a ticket on hold, the date in the 'Remind me one day before:' field must be a date in the future.";
+//          }
+//        } catch (err) {
+//          return true;
+//        }
+//      }
     },
 
 
