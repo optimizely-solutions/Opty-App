@@ -754,6 +754,7 @@
       var org = currentTicket.organization();
       var user = currentTicket.requester();
       this.accountName = "";
+      var msg;
 
       if (org) {
         this.accountName = org.name();
@@ -771,7 +772,7 @@
           this.churnRisk = org.churn_risk === true ? 'yes' : 'no';
 
           if(org.customField("has_enterprise_potential") === true){
-              var msg = "Enterprise potential!";
+              msg = "Enterprise potential!";
               this.showAccountStatus(msg);
           }
           this.subscription_id = org.customField("subscription_id");
@@ -780,11 +781,11 @@
           this.prioritySupport = org.customField('priority_support');
           
           if(org.customField('priority_support') === 'priority_support_org_yes'){
-              var msg = "Account entitled to Priority Support";
+              msg = "Account entitled to Priority Support";
               this.showAccountStatus(msg);
           }
           else if(org.customField('priority_support_manual_override') === true){
-              var msg = "Account entitled to Priority Support";
+              msg = "Account entitled to Priority Support";
               this.showAccountStatus(msg);
           }
 
