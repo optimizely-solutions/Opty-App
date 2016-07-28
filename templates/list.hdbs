@@ -1,5 +1,5 @@
 <div id="trialStatusWrapper">
-  <section potential-status/>
+  <section account-status/>
   <section trial-status/>
 </div>
 

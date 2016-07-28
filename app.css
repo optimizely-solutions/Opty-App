@@ -373,7 +373,7 @@ header h3 {
   color:#90b71c;
 }
 
-section[potential-status] > p,section[trial-status] > p {
+section[account-status] > p,section[trial-status] > p {
     background-color:pink;
     border-color:#9f2828;
     border-width:1px;

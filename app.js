@@ -772,11 +772,21 @@
 
           if(org.customField("has_enterprise_potential") === true){
               var msg = "Enterprise potential!";
-              this.showPotential(msg);
+              this.showAccountStatus(msg);
           }
           this.subscription_id = org.customField("subscription_id");
           this.checkTrialStatus();
           this.isPlanSupported(this.subscriptionPlan, this.highestPlan);
+          this.prioritySupport = org.customField('priority_support');
+          
+          if(org.customField('priority_support') === 'priority_support_org_yes'){
+              var msg = "Account entitled to Priority Support";
+              this.showAccountStatus(msg);
+          }
+          else if(org.customField('priority_support_manual_override') === true){
+              var msg = "Account entitled to Priority Support";
+              this.showAccountStatus(msg);
+          }
 
           //End get org information
 
@@ -908,8 +918,8 @@
         }));
     },
       
-    showPotential: function(msg){
-        this.$('section[potential-status]')
+    showAccountStatus: function(msg){
+        this.$('section[account-status]')
         .html(this.renderTemplate('trialStatus', {
           message: msg
         }));
