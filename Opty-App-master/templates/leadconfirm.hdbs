@@ -1,7 +1,0 @@
-<div id='Confirmation2'>
-
-<b>Step {{step}} - No records found!</b>
-<br>
-<p>We weren't able to find any subscriptions, contacts or leads matching the information on this ticket.</p>
-
-</div>
