@@ -623,7 +623,7 @@
       var requester = ticket.requester().email();
 
       //Check for a valid requester before saving the ticket unless a new ticket is being created
-      if (status !== "new") {
+//      if (status !== "new") {
           try {
             if (requester === 'zendesk-connector@voxter.com' || requester === 'noreply@optimizely.com' || requester === 'support247@optimizely.zendesk.com'){
                   return "The ticket was not updated. Please verify the requester is valid before re-saving.";
@@ -632,7 +632,7 @@
            catch (err) {
                 return true;
            }
-      }
+//      }
       // Prevent ticket from being put in pending status unless Managing Team, Case Category and Case Type are filled out
       if (status === "pending") {
         try {
