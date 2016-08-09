@@ -41,6 +41,7 @@
         <li class="btn-white-small btn" name="devin">Devin</li>
         <li class="btn-white-small btn" name="holger">Holger</li>
         <li class="btn-white-small btn" name="lyndsey">Lyndsey</li>
+        <li class="btn-white-small btn" name="rocky">Rocky</li>
         <li class="btn-white-small btn" name="ted">Ted</li>
       </ul>
     </div>
