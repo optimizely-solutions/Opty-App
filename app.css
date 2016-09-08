@@ -40,7 +40,8 @@ label {
     width: 14px;
     height: 14px;
     background-image:url(http://www.phpclasses.org/browse/view/image/file/56317/name/glyphicons-halflings-white.png);
-    vertical-align: text-top;
+    vertical-align: middle;
+    padding-bottom: 3px;
     background-repeat: no-repeat;
 }
 
