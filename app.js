@@ -58,6 +58,15 @@
         };
       },
 
+      updateOrgNotes: function(subdomain, org_id, dataObject) {
+        return {
+          url: '/api/v2/organizations/' + org_id + '.json',
+          type: 'PUT',
+          dataType: 'json',
+          data: dataObject
+        };
+      },
+
 
       //General Rquest Functions  End Here -------------------------------------------------------------------------------------->
 
@@ -184,8 +193,7 @@
       'click #collaborator_button': 'openCollaborator',
       'click #collaborators li': 'addCollaborator',
       'click #collaborators li.collab': 'removeCollaborator',
-      //'click #add_notes': 'this.updateAccNotes',
-      //'blur #acc_notes_input': 'this.saveAccNotes',
+      'blur #acc_notes_input': 'this.saveAccNotes',
       
 
 
@@ -816,6 +824,7 @@
           this.userDetails = user.details();
           this.zendesk_salesforce_contact_id = user.customField("zendesk_salesforce_contact_id");
           this.org = org.customField("id");
+          this.accountNotes = org.customField("zendesk_account_notes");
           //End get contact information
 
 
@@ -870,7 +879,8 @@
               userDetails: this.userDetails,
               sfdcSubscription: this.sfdcSubscription,
               sfdcAccount: this.sfdcAccount,
-              sfdcUser: this.sfdcUser
+              sfdcUser: this.sfdcUser,
+              accountNotes: this.accountNotes
             }));
 
       }
@@ -1774,7 +1784,30 @@
       });
       this.$('#euSDR').addClass('hide');
 
-    }
+    },
+
+    updateAccNotes: function() {
+      var ticket = this.ticket();
+      var org = ticket.organization();
+      var curText = org.customField("zendesk_account_notes");
+      var inputField = this.$("#acc_notes_input");
+      inputField.css({"height":this.$(".acc_notes div").height(),"display":"inline-block"});
+      inputField.val(curText);
+    },
+
+    saveAccNotes: function() {
+      //var subdomain = "optimizely1430953864";
+      var subdomain = "optimizely";
+      var curText = this.$("#acc_notes_input").val();
+      var ticket = this.ticket();
+      var org = ticket.organization();
+      var orgId = org.id();
+      org.customField("zendesk_account_notes", curText);
+
+      this.ajax('updateOrgNotes', subdomain, orgId, org).done(function(data) {
+        this.$("#acc_notes_input").text(org.customField("zendesk_account_notes"));
+      });
+    },
 
     //SFDC Opty App Functions End Here ------------------------------------------------------------------>
 
