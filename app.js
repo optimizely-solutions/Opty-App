@@ -629,18 +629,20 @@
       var status = ticket.status();
       var form = ticket.form().id();
       var requester = ticket.requester().email();
+      var subject = ticket.subject();
 
-      //Check for a valid requester before saving the ticket unless a new ticket is being created
-//      if (status !== "new") {
+      //Check for a valid requester and subject before saving the ticket 
           try {
             if (requester === 'zendesk-connector@voxter.com' || requester === 'noreply@optimizely.com' || requester === 'support247@optimizely.zendesk.com'){
                   return "The ticket was not updated. Please verify the requester is valid before re-saving.";
+             }
+             else if (subject.indexOf('Support Call From') != -1){
+                  return "The ticket was not updated. Please add a concise, unique subject describing the issue.";
              }
            }
            catch (err) {
                 return true;
            }
-//      }
       // Prevent ticket from being put in pending status unless Managing Team, Case Category and Case Type are filled out
       if (status === "pending") {
         try {
