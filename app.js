@@ -923,7 +923,7 @@
         else if(this.subscriptionStatus === 'trial_sub'){
             msg = "Active Free Trial";
         }
-        if(trialEndString.indexOf('Thu Jan 01 1970') > -1){
+        if(org.customField("trial_end_date") === null || trialEndString.indexOf('Thu Jan 01 1970') > -1){
             return;
         }
         else if(this.trialEnd > now){
