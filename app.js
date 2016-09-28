@@ -923,7 +923,7 @@
         else if(this.subscriptionStatus === 'trial_sub'){
             msg = "Active Free Trial";
         }
-        if(org.customField("trial_end_date") === null || trialEndString.indexOf('Thu Jan 01 1970') > -1){
+        if (org.customField("trial_end_date") === null || trialEndString.indexOf('Thu Jan 01 1970') > -1){
             return;
         }
         else if(this.trialEnd > now){
@@ -1128,18 +1128,33 @@
                   this.consoleDebug("normal", 'OptimizelySFDC - Info- Search Subscription -  SFDC Data Returned - Subscription found was Gold, Platinum, Enterprise or Agency.');
 
                   //Account is subscribed, and plan is Platinum, Agency, Gold so store data into Chatter variables
-                  this.ChatterRecordId = data.records[0].Account__r.Account_ID_18_Char__c;
-                  this.ChatterOwnerId = data.records[0].Account__r.Team_Member_1__c;
-                  this.ChatterOwnerName = data.records[0].Account__r.Team_Member_1_First_Name__c;
-                  this.ChatterAE = data.records[0].Account__r.Team_Member_1_First_Name__c;
-                  this.ChatterAEId = data.records[0].Account__r.Team_Member_1__c;
-                  this.ChatterCSM = data.records[0].Account__r.Team_Member_2_First_Name__c;
-                  this.ChatterCSMId = data.records[0].Account__r.Team_Member_2__c;
-                  this.ChatterCSMName = data.records[0].Account__r.Team_Member_2_First_Name__c;
-                  this.ChatterOpenerId = data.records[0].Account__r.Team_Member_4__c;
-                  this.ChatterOpenerName = data.records[0].Account__r.Team_Member_4_First_Name__c;
-                  this.ChatterOpener = data.records[0].Account__r.Team_Member_4_First_Name__c;
+                  this.ChatterRecordId = data.records[0].Id;
+                  this.ChatterOwnerId = undefined;
+                  this.ChatterOwnerName = undefined;
+                  this.ChatterAE = undefined;
+                  this.ChatterAEId = undefined;
+                  this.ChatterCSM = undefined;
+                  this.ChatterCSMId = undefined;
+                  this.ChatterCSMName = undefined;
+                  this.ChatterOpenerId = undefined;
+                  this.ChatterOpenerName = undefined;
+                  this.ChatterOpener = undefined;
 
+                  if (typeof(data.records[0].Account__c) != "undefined") {
+                      this.ChatterRecordId = data.records[0].Account__r.Account_ID_18_Char__c;
+                      this.ChatterOwnerId = data.records[0].Account__r.Team_Member_1__c;
+                      this.ChatterOwnerName = data.records[0].Account__r.Team_Member_1_First_Name__c;
+                      this.ChatterAE = data.records[0].Account__r.Team_Member_1_First_Name__c;
+                      this.ChatterAEId = data.records[0].Account__r.Team_Member_1__c;
+                      this.ChatterCSM = data.records[0].Account__r.Team_Member_2_First_Name__c;
+                      this.ChatterCSMId = data.records[0].Account__r.Team_Member_2__c;
+                      this.ChatterCSMName = data.records[0].Account__r.Team_Member_2_First_Name__c;
+                      this.ChatterOpenerId = data.records[0].Account__r.Team_Member_4__c;
+                      this.ChatterOpenerName = data.records[0].Account__r.Team_Member_4_First_Name__c;
+                      this.ChatterOpener = data.records[0].Account__r.Team_Member_4_First_Name__c;
+
+
+                  }
 
                   //Change the screen to show the Chatter message post before going forward
                   this.RecordType = "Subscription";
@@ -1261,19 +1276,34 @@
                       this.ChatterOwnerName = data.records[0].Owner.Id;
                   }
 
-
+                  //Account is subscribed, and plan is Platinum, Agency, Gold so store data into Chatter variables
                   this.ChatterRecordId = data.records[0].Contact_ID_18_Char__c;
-                  this.ChatterOwnerId = data.records[0].Owner.Id;
-                  this.OrgName = data.records[0].Account__r.Name;
-                  this.ChatterAE = subInfo.records[0].Account__r.Team_Member_1_First_Name__c;
-                  this.ChatterAEId = subInfo.records[0].Account__r.Team_Member_1__c;
-                  this.ChatterCSM = subInfo.records[0].Account__r.Team_Member_2_First_Name__c;
-                  this.ChatterCSMId = subInfo.records[0].Account__r.Team_Member_2__c;
-                  this.ChatterCSMName = subInfo.records[0].Account__r.Team_Member_2_First_Name__c;
-                  this.ChatterOpenerId = subInfo.records[0].Account__r.Team_Member_4__c;
-                  this.ChatterOpenerName = subInfo.records[0].Account__r.Team_Member_4_First_Name__c;
-                  this.ChatterOpener = subInfo.records[0].Account__r.Team_Member_4_First_Name__c;
+                  this.ChatterOwnerId = undefined;
+                  this.ChatterOwnerName = undefined;
+                  this.ChatterAE = undefined;
+                  this.ChatterAEId = undefined;
+                  this.ChatterCSM = undefined;
+                  this.ChatterCSMId = undefined;
+                  this.ChatterCSMName = undefined;
+                  this.ChatterOpenerId = undefined;
+                  this.ChatterOpenerName = undefined;
+                  this.ChatterOpener = undefined;
+                  this.OrgName = undefined;
 
+                  if (typeof(data.records[0].Account__c) != "undefined") {
+                      this.ChatterRecordId = data.records[0].Account__r.Account_ID_18_Char__c;
+                      this.ChatterOwnerId = data.records[0].Account__r.Team_Member_1__c;
+                      this.ChatterOwnerName = data.records[0].Account__r.Team_Member_1_First_Name__c;
+                      this.ChatterAE = data.records[0].Account__r.Team_Member_1_First_Name__c;
+                      this.ChatterAEId = data.records[0].Account__r.Team_Member_1__c;
+                      this.ChatterCSM = data.records[0].Account__r.Team_Member_2_First_Name__c;
+                      this.ChatterCSMId = data.records[0].Account__r.Team_Member_2__c;
+                      this.ChatterCSMName = data.records[0].Account__r.Team_Member_2_First_Name__c;
+                      this.ChatterOpenerId = data.records[0].Account__r.Team_Member_4__c;
+                      this.ChatterOpenerName = data.records[0].Account__r.Team_Member_4_First_Name__c;
+                      this.ChatterOpener = data.records[0].Account__r.Team_Member_4_First_Name__c;
+                      this.OrgName = data.records[0].Account__r.Name;
+                  }
 
                   //Render the Confirmation screen to present data back to the user
                   this.RecordType = "Contact";
@@ -1292,18 +1322,33 @@
                       this.ChatterOwnerName = data.records[0].Owner.Id;
                     }
 
-                    //Render the Confirmation screen to present data back to the user
-                    this.ChatterRecordId = data.records[0].Contact_ID_18_Char__c;
-                    this.ChatterOwnerId = data.records[0].Owner.Id;
-                    this.OrgName = data.records[0].Account.Name;
-                    this.ChatterAE = subInfo.records[0].Account__r.Team_Member_1_First_Name__c;
-                    this.ChatterAEId = subInfo.records[0].Account__r.Team_Member_1__c;
-                    this.ChatterCSM = subInfo.records[0].Account__r.Team_Member_2_First_Name__c;
-                    this.ChatterCSMId = subInfo.records[0].Account__r.Team_Member_2__c;
-                    this.ChatterCSMName = subInfo.records[0].Account__r.Team_Member_2_First_Name__c;
-                    this.ChatterOpenerId = subInfo.records[0].Account__r.Team_Member_4__c;
-                    this.ChatterOpenerName = subInfo.records[0].Account__r.Team_Member_4_First_Name__c;
-                    this.ChatterOpener = subInfo.records[0].Account__r.Team_Member_4_First_Name__c;
+                    //Account is subscribed, and plan is Platinum, Agency, Gold so store data into Chatter variables
+                    this.ChatterOwnerId = undefined;
+                    this.ChatterOwnerName = undefined;
+                    this.ChatterAE = undefined;
+                    this.ChatterAEId = undefined;
+                    this.ChatterCSM = undefined;
+                    this.ChatterCSMId = undefined;
+                    this.ChatterCSMName = undefined;
+                    this.ChatterOpenerId = undefined;
+                    this.ChatterOpenerName = undefined;
+                    this.ChatterOpener = undefined;
+                    this.OrgName = undefined;
+
+                    if (typeof(data.records[0].Account__c) != "undefined") {
+                        this.ChatterRecordId = data.records[0].Account__r.Account_ID_18_Char__c;
+                        this.ChatterOwnerId = data.records[0].Account__r.Team_Member_1__c;
+                        this.ChatterOwnerName = data.records[0].Account__r.Team_Member_1_First_Name__c;
+                        this.ChatterAE = data.records[0].Account__r.Team_Member_1_First_Name__c;
+                        this.ChatterAEId = data.records[0].Account__r.Team_Member_1__c;
+                        this.ChatterCSM = data.records[0].Account__r.Team_Member_2_First_Name__c;
+                        this.ChatterCSMId = data.records[0].Account__r.Team_Member_2__c;
+                        this.ChatterCSMName = data.records[0].Account__r.Team_Member_2_First_Name__c;
+                        this.ChatterOpenerId = data.records[0].Account__r.Team_Member_4__c;
+                        this.ChatterOpenerName = data.records[0].Account__r.Team_Member_4_First_Name__c;
+                        this.ChatterOpener = data.records[0].Account__r.Team_Member_4_First_Name__c;
+                        this.OrgName = data.records[0].Account__r.Name;
+                    }
 
                     this.RecordType = "Contact";
                     this.renderConfirmation1("Step 1 - Chatter Notification Options");
@@ -1502,7 +1547,7 @@
         //Debug Mode & Debug Object Mode - Log to Console
         this.consoleDebug("normal", "OptimizelySFDC - Chatter Post - Post Request to " + this.RecordType + " Name = " + RecordName + "Record = " + this.ChatterRecordId + " where Owner = " + this.ChatterOwnerName);
         this.consoleDebug("normal", 'OptimizelySFDC - Info - Chatter Message  for ' + this.ChatterOwnerName + ': ' + this.ChatterMessage);
-        if (this.ChatterOwnerName == "Not Assigned. SDR Lead only will be notified") {
+        if (this.ChatterOwnerName == "No team assigned. Opener Lead only will be notified") {
           this.ajax('postChatter_single')
             .done(function(data) {
               this.chatter_success(data, RecordName);
@@ -1650,7 +1695,7 @@
       }
 
       this.ChatterMessage = "<TYPE YOUR MESSAGE HERE. PLEASE INCLUDE AS MUCH CONTEXT AS POSSIBLE FOR THE SALES HUMAN/CSM>";
-      if (this.ChatterOwnerName === '') {
+      if (this.ChatterOwnerName === '' || typeof(this.ChatterOwnerName) == "undefined") {
         this.ChatterOwnerName = "No team assigned. Opener Lead only will be notified";
       }
 
@@ -1682,6 +1727,14 @@
       this.$("#confirmation").addClass("show");
       this.$("#confirmation").removeClass("hide");
       this.sfdcmodal = "#confirmation";
+
+      if (this.$("#ae").text() === "") {
+        this.$("#ae").hide();
+      } else if (this.$("#opener").text() === "") {
+        this.$("#opener").hide();
+      } else if (this.$("#csm").text() === "") {
+        this.$("#csm").hide();
+      }
 
     },
 
