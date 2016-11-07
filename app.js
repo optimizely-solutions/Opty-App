@@ -172,7 +172,7 @@
 
       'app.activated': 'initializeApp',
       'ticket.save': 'SaveUpdates',
-      'ticket.custom_field_21047815.changed': 'updateImpersonate',
+      'ticket.custom_field_21047815.changed': 'updateEmulate',
       'click #changerecipient': 'changeRecipient',
       'click #btnSentVia': 'showChangeRecipient',
       'click #saveSentVia': 'updateRecipient2',
@@ -187,6 +187,7 @@
       'click #countrysetting': 'setCountrySetting',
       'click #switchlead': 'switchLeadCountry',
       'click #cancelSDR': 'cancelChange',
+      'click #default_to_optimizely_x': 'switchEmulateVersionDefault',
       'click #btnSendMobile': 'changeRecipientMobile',
       'click a.validation': 'validateExperimentId',
       'click a.notes_link': 'toggleAccountNotes',
@@ -306,13 +307,13 @@
       this.requesterID = currentTicket.requester().id();
       var org = currentTicket.organization();
       var user = currentTicket.requester();
-      var imp_email = user.email() || '';
+      var emulate_email = user.email() || '';
 
-      //Adding impersonate by experiment id button
+      //Adding emulate by experiment id button
       var experimentId = currentTicket.customField('custom_field_22559284') || '';
       this.exp = experimentId;
-      this.impersonation_link = "https://www.optimizely.com/admin/impersonate?experiment_id=" + this.exp + "&redirect=https://www.optimizely.com/edit?experiment_id=" + this.exp;
-      this.userEmail = imp_email.trim();
+      this.emulate_link = "https://www.optimizely.com/admin/impersonate?experiment_id=" + this.exp + "&redirect=https://www.optimizely.com/edit?experiment_id=" + this.exp;
+      this.userEmail = emulate_email.trim();
 
       //function to check if the ticket was sent to internal-support@ and change the Sent Via field to support@ if necessary
       this.checkIfInternal();
@@ -326,12 +327,19 @@
     AppInitialized: function() {
       //REnders the APP UI after all of the data is initialized
 
+      if (this.store('emulateVersionDefault') == 2) {
+        this.emulateVersionDefault = 2;
+      } else {
+        this.emulateVersionDefault = 1;
+      }
+
+      //Get the Users setting for ACcount Lookup display and for EU User, and set checkboxes accordingly
 
       //Set Links for Impersonation and Account Look 
       var currentDomain = this.userEmail.split("@")[1];
       var encodedEmail = encodeURIComponent(this.userEmail);
-      this.link1 = "https://www.optimizely.com/admin/impersonate?email=" + this.userEmail + "&redirect=https://www.optimizely.com/dashboard";
-      this.link2 = "https://app.optimizely.com/s/user?user_id=" + encodedEmail;
+      this.link1 = "https://www.optimizely.com/s/redirect-to-emulate?input=" + this.userEmail + '&version=' + this.emulateVersionDefault;
+      this.link2 = "https://success.dz.optimizely.com/s/user?user_id=" + encodedEmail;
       this.link3 = "https://optimizely.recurly.com/accounts?utf8=✓&q=" + this.userEmail;
       this.link4 = "https://optimizely.recurly.com/accounts?utf8=✓&q=" + currentDomain;
       this.link5 = "http://" + currentDomain;
@@ -342,9 +350,9 @@
       var findID = this.exp.match(/(\d+){1}/g);
       var experimentId = parseInt(findID, 10);
       if ((typeof experimentId == "number") && (experimentId.toString().length > 4)) {
-        this.link8 = "href=https://app.optimizely.com/s/do/redirect-to-impersonate?input=" + experimentId;
+        this.link8 = "href=https://app.optimizely.com/s/redirect-to-emulate?input=" + experimentId + '&version=' + this.emulateVersionDefault;
         this.link9 = "href=https://app.optimizely.com/admin/impersonate?experiment_id=" + experimentId + "&redirect=%2Fresults%3Fexperiment_id%3D" + experimentId;
-        this.link10 = "href=https://app.optimizely.com/s/experiment_export/" + experimentId;
+        this.link10 = "href=https://success.dz.optimizely.com/s/experiment_export/" + experimentId;
       } else {
         this.link8 = "";
         this.link9 = "";
@@ -391,7 +399,13 @@
       //[Account notes functionality] gather account information to make available for TSEs 
       this.getAccountInfo();
       this.highlightCollaborator();
-      
+
+      if (this.store('emulateVersionDefault') == 2) {
+        this.$('#default_to_optimizely_x').prop('checked', true);
+      } else {
+        this.emulateVersionDefault = 1;
+      }
+
     },
 
     validateExperimentId: function() {
@@ -507,16 +521,29 @@
     },
 
 
-    updateImpersonate: function() {
-      //function to update the impersonate email when the user changes it
+    updateEmulate: function() {
+      //function to update the emulate email when the user changes it
 
-      var imp_email = '';
-      if (this.ticket().customField('custom_field_21047815') === '') {
-        imp_email = this.ticket().requester().email();
+      var emulate_email = '';
+      var custom_field_21047815 = this.ticket().customField('custom_field_21047815');
+      if (typeof custom_field_21047815 == 'undefined' || custom_field_21047815 === '') {
+        emulate_email = this.ticket().requester().email();
       } else {
-        imp_email = this.ticket().customField('custom_field_21047815');
+        emulate_email = this.ticket().customField('custom_field_21047815');
       }
-      this.$('#impersonate').attr("href", "https://www.optimizely.com/admin/impersonate?email=" + imp_email + "&redirect=https://www.optimizely.com/dashboard");
+
+      this.$('#emulate_button').attr("href", "https://app.optimizely.com/s/redirect-to-emulate?input=" + emulate_email + '&version=' + this.store('emulateVersionDefault'));
+
+      var experimentID = this.ticket().customField('custom_field_22559284') || '';
+      var findID = experimentID.match(/(\d+){1}/g);
+      experimentID = parseInt(findID, 10);
+
+      if ((typeof experimentID == "number") && (experimentID.toString().length > 4)) {
+        this.$('#emulate_experiment').attr("href", "https://app.optimizely.com/s/redirect-to-emulate?input=" + experimentID + '&version=' + this.store('emulateVersionDefault'));
+      } else {
+        this.$('#emulate_experiment').attr("href", "");
+        this.msg = 'No valid experiment id found!';
+      }
 
     },
     changeRecipientMobile: function() {
@@ -718,6 +745,18 @@
 
     },
 
+    switchEmulateVersionDefault: function() {
+
+      //Function to change the local storage variables when a user updates the "Account Links Expanded option"
+      if (this.$('#default_to_optimizely_x:checked').is(':checked')) {
+        this.store('emulateVersionDefault', 2);
+      } else {
+        this.store('emulateVersionDefault', 1);
+      }
+
+      this.updateEmulate();
+
+    },
 
     consoleDebug: function(type, message, data) {
 
