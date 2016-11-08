@@ -5,14 +5,18 @@
 
 <div id='button_container'>
 
-  <p class="group-label">Impersonate:</p>
-  <!-- Impersonate by email Button -->
-  <a id='impersonate_button' class='btn btn-large btn-inverse btn-small' href="{{link1}}" target='_blank'><i class="icon-user"></i>User</a>
+  <p class="group-label">Emulate:</p>
+  <!-- Emulate by email Button -->
+  <a id='emulate_button' class='btn btn-large btn-inverse btn-small' href="{{link1}}" target='_blank'><i class="icon-user"></i>User</a>
 
-  <!-- Impersonate by experiment id Button -->
-  <a id='impersonate_experiment' class='btn btn-large btn-inverse validation btn-small' {{link8}} target='_blank' style="margin-right:7px;"><i class="icon-pencil"></i>Experiment</a>
+  <!-- Emulate by experiment id Button -->
+  <a id='emulate_experiment' class='btn btn-large btn-inverse validation btn-small' {{link8}} target='_blank' style="margin-right:7px;"><i class="icon-pencil"></i>Experiment</a>
 
-  <hr style="float:clear;margin-top:40px" />
+  <div style="clear:both;text-align:center;">
+    <label><input type="checkbox" id="default_to_optimizely_x" style="display:inline-block"> Default to Optimizely X</label>
+  </div>
+
+  <hr style="float:clear" />
 
   <p class="group-label">View Experiment:</p>
   <!-- View Results -->
@@ -51,6 +55,7 @@
         <li class="btn-white-small btn" name="allie">Allie</li>
         <li class="btn-white-small btn" name="david_s">David S</li>
         <li class="btn-white-small btn" name="mario">Mario</li>
+        <li class="btn-white-small btn" name="michal">Michal</li>
         <li class="btn-white-small btn" name="nils">Nils</li>
         <li class="btn-white-small btn" name="renée">Renée</li>
         <li class="btn-white-small btn" name="tibo">Tibo</li>
